@@ -1,0 +1,24 @@
+{
+	"development": {
+		"config_id": "development",
+		"app_name": "Slot Machine Simulator",
+		"app_desc": "Slot Machine Simulator",
+		"node_port": 5000,
+		"json_indentation": 2,
+		"database": "MongoDB Atlas"
+	},
+	"testing": {
+		"config_id": "testing",
+		"database": "MongoDB Atlas"
+	},
+	"staging": {
+		"config_id": "staging",
+		"node_port": 4000,
+		"database": "MongoDB Atlas"
+	},
+	"production": {
+		"config_id": "production",
+		"node_port": 8080,
+		"database": "MongoDB Atlas"
+	}
+}

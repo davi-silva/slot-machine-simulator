@@ -1,0 +1,16 @@
+{
+  "name": "slot-machine-simulator",
+  "version": "1.0.0",
+  "description": "Slot Machine Simulator",
+  "main": "app.js",
+  "author": "Davi Silva",
+  "license": "MIT",
+  "scripts": {
+    "client": "cd frontend && yarn run start",
+    "server": "cd backend && yarn run dev",
+    "dev": "concurrently \"yarn run client\" \"yarn run server\""
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.0"
+  }
+}
