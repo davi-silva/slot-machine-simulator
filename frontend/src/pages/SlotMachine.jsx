@@ -6,10 +6,19 @@ export default class SlotMachine extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      player: '',
+      playerInfo: null,
+      game: null,
+      round: null,
       showModal: true,
     };
     this.hidePlayModal = this.hidePlayModal.bind(this);
+    this.setPlayerInfo = this.setPlayerInfo.bind(this);
+  }
+
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve);
+    });
   }
 
   hidePlayModal() {
@@ -19,6 +28,11 @@ export default class SlotMachine extends Component {
     console.log('hidePlayModal');
   }
 
+  setPlayerInfo(playerInfo) {
+    this.setStateAsync({
+      playerInfo
+    })
+  }
 
   render() {
     const { showModal } = this.state;
@@ -26,7 +40,7 @@ export default class SlotMachine extends Component {
     if (showModal) {
       modal = (
         <>
-          <PlayerModal handler={this.hidePlayModal} />
+          <PlayerModal handler={this.hidePlayModal} setPlayer={this.setPlayerInfo}/>
         </>
       );
     } else {
