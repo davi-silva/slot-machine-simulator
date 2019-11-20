@@ -21,6 +21,7 @@ export const Wrapper = styled.div`
   width: 300px;
   height: 180px;
   padding: 10px;
+  border-radius: 2px;
   z-index: 99999;
 `;
 
@@ -47,17 +48,24 @@ export const Input = styled.input`
 `;
 
 export const Button = styled.button`
-  background: #fff;
-  color: #0058e4;
-  border: 1px solid #0058e4;
-  padding: 6px 10px;
+  background-image: linear-gradient(to right, #0058e4 0%, #9000e4 100%);
+  background-size: 200% auto;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 30px;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.3);
   display: table;
   margin: 20px auto 0 auto;
+  transition: all .2s ease-in;
   &:focus {
     outline: none;
   }
   &:active {
     animation: ${HoldPlayButton} forwards;
+    background-position: right center;
+  }
+  &:hover {
+    background-position: right center;
   }
 `;
