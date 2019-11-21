@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import BAR3 from '../../../static/img/3xBAR.png';
-import BAR2 from '../../../static/img/2xBAR.png';
 import BAR from '../../../static/img/BAR.png';
+import BAR2 from '../../../static/img/2xBAR.png';
+import BAR3 from '../../../static/img/3xBAR.png';
 import Seven from '../../../static/img/7.png';
 import Cherry from '../../../static/img/Cherry.png';
 
@@ -40,7 +40,37 @@ export default class Machine extends Component {
       game: null,
       round: null,
       startGame: false,
+      slotsTypes: null,
+      slots: null,
     };
+    this.componentDidMount = this.componentDidMount.bind(this);
+  }
+
+
+  async componentDidMount() {
+    const slotsTypes = {
+      bar1: [0, 0, 100],
+      bar2: [0, 0, 150],
+      bar3: [0, 0, 250],
+      seven: [0, 0, 500],
+      cherry: [2, 5, 10],
+      anybar: [0, 0, 80],
+    };
+    const slots = [
+      ['bar2', 'bar3', 'bar1', 'cherry', 'bar1', 'cherry', 'seven'],
+      ['bar2', 'bar3', 'bar1', 'cherry', 'bar1', 'cherry', 'seven'],
+      ['bar2', 'bar3', 'bar1', 'cherry', 'bar1', 'cherry', 'seven'],
+    ];
+    this.setStateAsync({
+      slotsTypes,
+      slots,
+    });
+  }
+
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve);
+    });
   }
 
   render() {

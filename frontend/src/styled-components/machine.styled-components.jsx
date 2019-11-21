@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const SlotMachine = styled.div`
   height: 247px;
-  width: 450px;
+  width: 400px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -18,7 +18,7 @@ export const SlotMachine = styled.div`
 export const MachineBody = styled.div`
   background: linear-gradient(to right, #0058e4 0%, #9000e4 100%);
   position: relative;
-  width: 450px;
+  width: 400px;
   height: 247px;
   border-radius: 10px 150px;
   z-index: 2;
@@ -61,16 +61,16 @@ export const SlotBlock = styled.div`
 export const SlotFrame = styled.div`
   background: #1b1b1b;
   background: linear-gradient(to bottom,#1b1b1b 0%,#2b2929 8%,#191919 20%,#000000 47%,#000000 50%,#000000 54%,#1d1b1b 100%);
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.3), 0 1px 1px rgba(255, 255, 255, 0.5), 0 -1px 1px rgba(255, 255, 255, 0.2), inset 0 -2px 15px #000;
+  box-shadow: 0 0 16px rgba(255,255,255,0.3), 0 1px 1px rgba(255,255,255,0.5), 0 -1px 1px rgba(255,255,255,0.2), inset 0 -2px 15px #000;
   box-sizing: border-box;
-  border: 2px solid linear-gradient(to left, #0058e4 0%, #9000e4 100%);
+  border: 2px solid linear-gradient(to left,#0058e4 0%,#9000e4 100%);
   height: 140px;
-  width: 403px;
+  width: 370px;
   border-radius: 10px;
-  left: 24%;
+  left: 25%;
   margin-left: -85px;
   position: absolute;
-  top: 32px;
+  top: 25px;
   z-index: 1;
 `;
 
@@ -94,8 +94,8 @@ export const SlotDisplay = styled.div`
   box-sizing: border-box;
   top: 185px;
   height: 40px;
-  width: 403px;
-  left: 24%;
+  width: 370px;
+  left: 25%;
   letter-spacing: 3px;
   line-height: 25px;
   margin-left: -85px;
@@ -136,7 +136,7 @@ export const SlotCredits = styled.div`
   font-weight: bold;
   margin-top: 6px;
   font-size: 20px;
-  letter-spacing: 18px;
+  letter-spacing: 16px;
   z-index: 2;
 `;
 
@@ -144,8 +144,8 @@ export const SlotZeros = styled.div`
   color: rgba(255, 255, 255, 0.3);
   font-size: 20px;
   margin-top: 6px;
-  margin-left: -54px;
-  letter-spacing: 18px;
+  margin-left: -51px;
+  letter-spacing: 16px;
   z-index: 1;
 `;
 
@@ -158,13 +158,13 @@ export const SlotWheels = styled.div`
   width: 155px;
   z-index: 999;
   #wheel1 {
-    left: 77px;
+    left: 52px;
   }
   #wheel2 {
-    left: 180px;
+    left: 155px;
   }
   #wheel3 {
-    left: 283px;
+    left: 258px;
   }
 `;
 
@@ -174,7 +174,7 @@ export const Wheel = styled.div`
   height: 122px;
   overflow: hidden;
   position: fixed;
-  top: 42px;
+  top: 35px;
   width: 92px;
 `;
 
