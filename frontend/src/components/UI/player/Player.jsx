@@ -15,12 +15,13 @@ export default class Player extends Component {
     super(props);
     this.state = {
       player: '',
-      isValid: true
+      isValid: true,
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangePlayerName = this.onChangePlayerName.bind(this);
     this.createNewPlayer = this.createNewPlayer.bind(this);
     this.checkPlayNameAvailability = this.checkPlayNameAvailability.bind(this);
+    this.resetPlayerName = this.resetPlayerName.bind(this);
   }
 
   async onSubmit(e) {
@@ -30,10 +31,10 @@ export default class Player extends Component {
 
     e.preventDefault();
     const valid = await this.checkPlayNameAvailability(player);
-    if(valid.valid) {
-      let playerName = {
-        "name": player
-      }
+    if (valid.valid) {
+      const playerName = {
+        name: player,
+      };
       const playerInfo = await this.createNewPlayer(playerName);
       console.log('playerInfo', playerInfo);
       const handleSetPlayerInfo = setPlayer;
@@ -41,39 +42,28 @@ export default class Player extends Component {
       handlerHideModal();
     } else {
       this.setStateAsync({
-        isValid: false
-      })
+        isValid: false,
+      });
     }
   }
+
+  async onChangePlayerName(e) {
+    this.setStateAsync({
+      player: e.target.value,
+    });
+  }
+
+  async resetPlayerName() {
+    this.setStateAsync({
+      player: '',
+    });
+  }
+
 
   setStateAsync(state) {
     return new Promise((resolve) => {
       this.setState(state, resolve);
     });
-  }
-
-  async onChangePlayerName(e) {
-    this.setStateAsync({
-      player: e.target.value
-    })
-  }
-
-  async checkPlayNameAvailability(playerName) {
-    console.log('playerName:', playerName)
-    this.response = await fetch(
-      `http://localhost:5000/players/validation/name/${playerName}`,
-      {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      },
-    );
-    const data = await this.response.json();
-    return data;
   }
 
   async createNewPlayer(player) {
@@ -94,23 +84,43 @@ export default class Player extends Component {
     return data;
   }
 
+  async checkPlayNameAvailability(playerName) {
+    console.log('playerName:', playerName);
+    this.response = await fetch(
+      `http://localhost:5000/players/validation/name/${playerName}`,
+      {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const data = await this.response.json();
+    return data;
+  }
+
 
   render() {
-    const {isValid} = this.state;
+    const { isValid, player } = this.state;
     let notValidPlayerWarning;
-    if(isValid) {
+    if (isValid) {
       notValidPlayerWarning = (
         <>
         </>
-      )
+      );
     } else {
       notValidPlayerWarning = (
         <>
-          <Warning>
-            This name has already been used.
+          <Warning
+            onClick={this.resetPlayerName}
+          >
+            This name is taken.
           </Warning>
         </>
-      )
+      );
     }
     return (
       <>
@@ -122,8 +132,9 @@ export default class Player extends Component {
                   <Title>Player Name</Title>
                   <form onSubmit={this.onSubmit}>
                     <Input
-                    onChange={this.onChangePlayerName}
-                    required
+                      onChange={this.onChangePlayerName}
+                      value={player}
+                      required
                     />
                     {notValidPlayerWarning}
                     <Button>

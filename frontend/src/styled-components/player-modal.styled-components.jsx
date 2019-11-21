@@ -17,10 +17,10 @@ export const Wrapper = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.3);
   width: 300px; 
   padding: 20px 10px;
-  border-radius: 2px;
+  border-radius: 5px;
   z-index: 99999;
 `;
 

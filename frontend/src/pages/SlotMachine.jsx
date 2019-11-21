@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 
 import PlayerModal from '../components/UI/player/Player';
+import Machine from '../components/UI/machine/Machine';
 
 export default class SlotMachine extends Component {
   constructor(props) {
     super(props);
     this.state = {
       playerInfo: null,
-      game: null,
-      round: null,
       showModal: true,
     };
     this.hidePlayModal = this.hidePlayModal.bind(this);
@@ -21,6 +20,12 @@ export default class SlotMachine extends Component {
     });
   }
 
+  setPlayerInfo(playerInfo) {
+    this.setStateAsync({
+      playerInfo,
+    });
+  }
+
   hidePlayModal() {
     this.setState({
       showModal: false,
@@ -28,19 +33,18 @@ export default class SlotMachine extends Component {
     console.log('hidePlayModal');
   }
 
-  setPlayerInfo(playerInfo) {
-    this.setStateAsync({
-      playerInfo
-    })
-  }
-
   render() {
     const { showModal } = this.state;
     let modal;
+    let slotMachine;
     if (showModal) {
       modal = (
         <>
-          <PlayerModal handler={this.hidePlayModal} setPlayer={this.setPlayerInfo}/>
+          <PlayerModal handler={this.hidePlayModal} setPlayer={this.setPlayerInfo} />
+        </>
+      );
+      slotMachine = (
+        <>
         </>
       );
     } else {
@@ -48,10 +52,16 @@ export default class SlotMachine extends Component {
         <>
         </>
       );
+      slotMachine = (
+        <>
+          <Machine />
+        </>
+      );
     }
     return (
       <>
         {modal}
+        {slotMachine}
       </>
     );
   }
