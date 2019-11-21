@@ -15,9 +15,9 @@ function App() {
   return (
     <Router>
       <NavigationBar />
-      <Route path="/" component={SlotMachine} />
+      <Route path="/" exact component={SlotMachine} />
       <Route path="/about" exact component={About} />
-      <Route path="/scoreboard" component={LeaderBoard} />
+      <Route path="/scoreboard" exact component={LeaderBoard} />
     </Router>
   );
 }

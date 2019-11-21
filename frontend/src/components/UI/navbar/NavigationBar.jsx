@@ -56,7 +56,7 @@ export default function Navbar() {
                       .classList.remove('show');
                   }}
                 >
-                    Scoreboard
+                    Leaderboard
                 </LinkA>
               </li>
               <li className="nav-item">

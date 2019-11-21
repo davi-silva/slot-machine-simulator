@@ -9,3 +9,133 @@ body {
   width: 100%;
   height: 100%;
 }
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes blurEffect {
+  0% {
+    filter: blur(0px);
+  }
+
+  100% {
+    filter: blur(5px);
+  }
+}
+
+@keyframes pushArm {
+  0% {
+    top: 17px!important;
+    height: 65%!important;
+  }
+  100% {
+    top: 45px!important;
+    height: 2%!important;
+  }
+}
+
+@keyframes releaseArm {
+  0% {
+    top: 45px!important;
+    height: 2%!important;
+  }
+  100% {
+    top: 17px!important;
+    height: 65%!important;
+  }
+}
+
+@keyframes pushArmKnob {
+  0% {
+    top: -15px!important;
+    height: 20px!important;
+  }
+  100% {
+    top: 0px!important;
+    height: 20px!important;
+  }
+}
+
+@keyframes releaseArm {
+  0% {
+    top: 0px!important;
+    height: 20px!important;
+  }
+  100% {
+    top: -15px!important;
+    height: 20px!important;
+  }
+}
+
+@keyframes pushArmShadow {
+  0% {
+    top: 67px!important;
+  }
+  100% {
+    top: 75px!important;
+  }
+}
+
+@keyframes releaseArmShadow {
+  0% {
+    top: 75px!important;
+  }
+  100% {
+    top: 67px!important;
+  }
+}
+
+@keyframes pushRingShadow {
+  0% {
+    top: 0%!important;
+    opacity: 0;
+  }
+  100% {
+    top: 50%!important;
+    opacity: 1;
+  }
+}
+
+@keyframes releaseRingShadow {
+  0% {
+    top: 50%!important;
+    opacity: 1;
+  }
+  100% {
+    top: 0%!important;
+    opacity: 0;
+  }
+}
+
+.blinkAnimation {
+  animation: blink .4s linear;
+}
+
+.blurEffect {
+  animation: blurEffect .1s ease-in forwards;
+}
+
+.pushArmAnimation {
+  animation: pushArm .5s linear forwards;
+}
+
+.releaseArmAnimation {
+  animation: releaseArm .5s linear forwards;
+}
+
+.slotTriggerDown {
+  background-position: 0px -17px;
+}
+
+
+
+

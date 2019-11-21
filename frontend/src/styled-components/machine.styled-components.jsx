@@ -9,7 +9,7 @@ export const SlotMachine = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 10px;
-  background: linear-gradient(to left,#6d00e4 0%,#4100e4 100%);
+  background: linear-gradient(to left,#6d00e4 0%,#002bff 100%);
   display: table;
   margin: 0 auto;
   box-shadow: 0 5px 13px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.6);
@@ -153,18 +153,18 @@ export const SlotWheels = styled.div`
   height: 86px;
   left: 450px;
   overflow: hidden;
-  position: fixed;
+  position: fixed!important;
   top: 77px;
   width: 155px;
   z-index: 999;
   #wheel1 {
-    left: 52px;
+    left: 52px!important;
   }
   #wheel2 {
-    left: 155px;
+    left: 155px!important;
   }
   #wheel3 {
-    left: 258px;
+    left: 258px!important;
   }
 `;
 
@@ -248,15 +248,15 @@ export const ArmShadow = styled.div`
 
 
 export const Ring1 = styled.div`
-    background: #282828;
-    background: linear-gradient(to bottom,#282828 0%,#959595 14%,#d1d1d1 37%,#bababa 49%,#959595 67%,#212121 100%);
-    border-radius: 0 2px 2px 0;
-    box-shadow: inset 0 2px 3px rgba(0,0,0,0.8);
-    height: 92%;
-    left: -3px;
-    width: 8px;
-    top: 50px!important;
-    z-index: 2;
+  background: #282828;
+  background: linear-gradient(to bottom,#282828 0%,#959595 14%,#d1d1d1 37%,#bababa 49%,#959595 67%,#212121 100%);
+  border-radius: 0 2px 2px 0;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.8);
+  height: 92%;
+  left: -3px;
+  width: 8px;
+  top: 50px!important;
+  z-index: 2;
 `;
 
 export const RingShadow1 = styled.div`
