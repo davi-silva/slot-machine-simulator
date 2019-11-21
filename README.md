@@ -31,3 +31,11 @@ yarn install ; cd backend ; yarn install ; cd ../frontend ; yarn install ; cd ..
 After running the command above all servers should be already up and running.
 
 Designed and Developed by [Davi Silva](https://github.com/Davi-Silva)
+
+## 2 Start the servers after installation
+
+To start the frontend and the backend servers after the installation, navigate to the root folder and simply run the following command:
+
+```bash
+yarn run dev
+```
