@@ -26,9 +26,17 @@ body {
   0% {
     filter: blur(0px);
   }
-
   100% {
     filter: blur(5px);
+  }
+}
+
+@keyframes unblurEffect {
+  0% {
+    filter: blur(5px);
+  }
+  100% {
+    filter: blur(0px);
   }
 }
 
@@ -122,10 +130,16 @@ body {
 
 .blurEffect {
   animation: blurEffect .1s ease-in forwards;
+  animation-delay: .5s;
+}
+
+.unblurEffect {
+  animation: unblurEffect .1s ease-in forwards;
+  animation-delay: .5s;
 }
 
 .pushArmAnimation {
-  animation: pushArm .5s linear forwards;
+  animation: pushArm .5s linear;
 }
 
 .releaseArmAnimation {
@@ -136,6 +150,13 @@ body {
   background-position: 0px -17px;
 }
 
+.slotSpinAnimation {
+
+}
 
 
+.slotTriggerDisabled {
+  background-position: 0px -34px;
+  /* display: none; */
+}
 

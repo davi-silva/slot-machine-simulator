@@ -47,7 +47,6 @@
       const endSlot = function () {
         $('#slot-block').show();
         $('#slot-credits').text('VERLOREN!!!');
-  
         setInterval(blink($('#slot-credits')), 1000);
       };
       const addCredit = function (incrementCredits) {

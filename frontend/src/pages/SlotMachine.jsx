@@ -8,7 +8,7 @@ export default class SlotMachine extends Component {
     super(props);
     this.state = {
       playerInfo: null,
-      showModal: true,
+      showModal: false,
     };
     this.hidePlayModal = this.hidePlayModal.bind(this);
     this.setPlayerInfo = this.setPlayerInfo.bind(this);

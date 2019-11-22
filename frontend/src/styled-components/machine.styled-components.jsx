@@ -190,10 +190,11 @@ export const WheelOverlay = styled.div`
 `;
 
 export const WheelImage = styled.img`
-  max-height: 60px;
+  height: 60px;
   max-width: 87px;
   display: table;
   margin: 0 auto;
+  transform: translateY(-28px);
 `;
 
 export const SlotTrigger = styled.div`
