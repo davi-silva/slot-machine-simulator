@@ -79,14 +79,12 @@ export default class Machine extends Component {
             center: ['bar', 'bar', 'bar', 10],
             bottom: ['bar', 'bar', 'bar', 10],
           },
-          Cherry7: {
-
-          },
         },
       },
       spinning: 3,
       spin: [0, 0, 0],
       credits: 15,
+      balance: 0,
       spinningWheel1Styled: null,
       spinningWheel2Styled: null,
       spinningWheel3Styled: null,
@@ -188,19 +186,19 @@ export default class Machine extends Component {
       slotTrigger.classList.add('slotTriggerDisabled');
       setTimeout(() => {
         this.stopSpin(1);
-      }, 500);
+      }, 2000);
 
       setTimeout(() => {
         this.stopSpin(2);
-      }, 1000);
+      }, 2500);
 
       setTimeout(() => {
         this.stopSpin(3);
-      }, 1500);
+      }, 3000);
 
       setTimeout(() => {
         this.stopSpin(4);
-      }, 1500);
+      }, 3500);
     }
     return false;
   }
@@ -244,24 +242,121 @@ export default class Machine extends Component {
       slots,
       spin,
       credits,
+      balance,
       winningCombinations,
     } = this.state;
-    console.log('slotsTypes:', slotsTypes);
+    // console.log('slotsTypes:', slotsTypes);
     console.log('slots:', slots);
     console.log('spin:', spin);
-    console.log('credits:', credits);
+    // console.log('credits:', credits);
     const {
       slotTrigger,
     } = this.refs;
 
-    console.log('slots[0][spin[0]]:', slots[0][spin[0]]);
-    const playerWinComb = [slots[0][spin[0]], slots[1][spin[1]], slots[2][spin[2]]];
-    console.log('winComb:', playerWinComb);
 
-    playerWinComb.forEach((symbol) => {
-      console.log('symbol:', symbol);
+    const playerCombTop = [];
+    const playerCombBottom = [];
+
+    const spinTop = spin;
+    for (let i = 0; i < 3; i += 1) {
+      if (spinTop[i] - 1 < 0) {
+        spinTop[i] = 4;
+        playerCombTop.push(slots[i][spinTop[i]]);
+      } else {
+        playerCombTop.push(slots[i][spinTop[i] - 1]);
+      }
+    }
+    console.log('playerCombTop:', playerCombTop);
+
+    const spinCenter = spin;
+    const playerCombCenter = [
+      slots[0][spinCenter[0]],
+      slots[1][spinCenter[1]],
+      slots[2][spinCenter[2]],
+    ];
+
+    console.log('playerCombCenter:', playerCombCenter);
+
+    const spinBottom = spin;
+    for (let i = 0; i < 3; i += 1) {
+      if (spinBottom[i] + 1 > 4) {
+        spinBottom[i] = 0;
+        playerCombBottom.push(slots[i][spinBottom[i]]);
+      } else {
+        playerCombBottom.push(slots[i][spinBottom[i] + 1]);
+      }
+    }
+    console.log('playerCombBottom:', playerCombBottom);
+
+
+    let cherriesAmountTop = 0;
+    let sevensAmountTop = 0;
+    playerCombTop.forEach((symbol) => {
+      if (symbol === 'seven') {
+        sevensAmountTop += 1;
+      }
+      if (symbol === 'cherry') {
+        cherriesAmountTop += 1;
+      }
     });
 
+    if (sevensAmountTop === 2 && cherriesAmountTop === 1) {
+      console.log('75 points earned');
+      this.setState({
+        balance: balance + 75,
+      });
+    } else if (sevensAmountTop === 1 && cherriesAmountTop === 2) {
+      console.log('75 points earned');
+      this.setState({
+        balance: balance + 75,
+      });
+    }
+
+    let cherriesAmountCenter = 0;
+    let sevensAmountCenter = 0;
+    playerCombCenter.forEach((symbol) => {
+      if (symbol === 'seven') {
+        sevensAmountCenter += 1;
+      }
+      if (symbol === 'cherry') {
+        cherriesAmountCenter += 1;
+      }
+    });
+
+    if (sevensAmountCenter === 2 && cherriesAmountCenter === 1) {
+      console.log('75 points earned');
+      this.setState({
+        balance: balance + 75,
+      });
+    } else if (sevensAmountCenter === 1 && cherriesAmountCenter === 2) {
+      console.log('75 points earned');
+      this.setState({
+        balance: balance + 75,
+      });
+    }
+
+    let cherriesAmountBottom = 0;
+    let sevensAmountBottom = 0;
+    playerCombBottom.forEach((symbol) => {
+      if (symbol === 'seven') {
+        sevensAmountBottom += 1;
+      }
+      if (symbol === 'cherry') {
+        cherriesAmountBottom += 1;
+      }
+    });
+
+    if (sevensAmountBottom === 2 && cherriesAmountBottom === 1) {
+      console.log('75 points earned');
+      this.setState({
+        balance: balance + 75,
+      });
+    } else if (sevensAmountBottom === 1 && cherriesAmountBottom === 2) {
+      console.log('75 points earned');
+      this.setState({
+        balance: balance + 75,
+      });
+    }
 
     // let slotType = slots[0][spin[0]];
     // console.log('slotType:', slotType);
@@ -298,16 +393,18 @@ export default class Machine extends Component {
     //   waitToSpin = 410 + winnedCredits;
     // }
 
-    setTimeout(() => {
-      if (credits === 0) {
-        this.endSlot();
-      } else {
-        slotTrigger.classList.remove('slotTriggerDisabled');
-        this.setState({
-          spinning: false,
-        });
-      }
-    }, 1000);
+    {
+      setTimeout(() => {
+        if (credits === 0) {
+          this.endSlot();
+        } else {
+          slotTrigger.classList.remove('slotTriggerDisabled');
+          this.setState({
+            spinning: false,
+          });
+        }
+      }, 1000);
+    }
   }
 
   addCredit(incrementCredits) {
