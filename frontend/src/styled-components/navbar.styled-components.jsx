@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 export const NavBar = styled.nav`
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: .05rem 1rem;
+  background: #fff;
+  z-index: 99;
 `;
 
 export const LinkA = styled(Link)`
@@ -14,7 +16,7 @@ export const LinkA = styled(Link)`
   letter-spacing: 1px;
   transition: all 0.2s ease-in-out;
   :hover {
-    color: #0058e4;
+    color: #6d00e4;
   }
   @media (max-width: 991px) {
     display: table;
@@ -29,7 +31,7 @@ export const LinkA = styled(Link)`
 `;
 
 export const Brand = styled(Link)`
-  color: #0058e4;
+  color: #6d00e4;
   font-weight: 900;
   letter-spacing: 1px;
   @media (max-width: 768px) {
@@ -47,7 +49,7 @@ export const Brand = styled(Link)`
 `;
 
 export const ToggleButton = styled.button`
-  color: #0058e4;
+  color: #6d00e4;
   :focus {
     outline: none;
   }

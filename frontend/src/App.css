@@ -10,6 +10,13 @@ body {
   height: 100%;
 }
 
+::selection {
+  background: #6d00e4;
+  color: #fff;
+}
+
+/* SLOT MACHINE */
+
 @keyframes blink {
   0% {
     opacity: 1;
@@ -27,13 +34,13 @@ body {
     filter: blur(0px);
   }
   100% {
-    filter: blur(5px);
+    filter: blur(1px);
   }
 }
 
 @keyframes unblurEffect {
   0% {
-    filter: blur(5px);
+    filter: blur(1px);
   }
   100% {
     filter: blur(0px);
@@ -42,10 +49,12 @@ body {
 
 @keyframes pushArm {
   0% {
+    position: fixed;
     top: 17px!important;
-    height: 65%!important;
+    height: 65px!important;
   }
   100% {
+    position: fixed;
     top: 45px!important;
     height: 2%!important;
   }
@@ -64,23 +73,20 @@ body {
 
 @keyframes pushArmKnob {
   0% {
-    top: -15px!important;
-    height: 20px!important;
+    transform: scale(1, 1);
   }
   100% {
-    top: 0px!important;
-    height: 20px!important;
+    transform: scale(1.1, 1.1);
   }
 }
 
 @keyframes releaseArm {
   0% {
-    top: 0px!important;
-    height: 20px!important;
+    transform: scale(1.1, 1.1);
   }
   100% {
-    top: -15px!important;
-    height: 20px!important;
+    transform: scale(1, 1);
+
   }
 }
 
@@ -124,22 +130,52 @@ body {
   }
 }
 
+@keyframes spinWheels {
+  0% {
+    transform: translateY(-28px);
+  }
+  50% {
+    transform: translateY(-200px);
+  }
+  75% {
+    transform: translateY(35px);
+  }
+  100% {
+    transform: translateY(-28px);
+  }
+}
+
+@keyframes stopSpinWheels {
+  0% {
+    transform: translateY(-28px);
+  }
+  50% {
+    transform: translateY(-200px);
+  }
+  75% {
+    transform: translateY(35px);
+  }
+  100% {
+    transform: translateY(-28px);
+  }
+}
+
 .blinkAnimation {
-  animation: blink .4s linear;
+  animation: blink .2s linear;
 }
 
 .blurEffect {
   animation: blurEffect .1s ease-in forwards;
-  animation-delay: .5s;
+  animation-delay: .025s;
 }
 
 .unblurEffect {
-  animation: unblurEffect .1s ease-in forwards;
-  animation-delay: .5s;
+  animation: unblurEffect .025s ease-out forwards;
+  animation-delay: .05s;
 }
 
 .pushArmAnimation {
-  animation: pushArm .5s linear;
+  animation: pushArm .5s linear forwards;
 }
 
 .releaseArmAnimation {
@@ -150,13 +186,35 @@ body {
   background-position: 0px -17px;
 }
 
-.slotSpinAnimation {
-
-}
-
-
 .slotTriggerDisabled {
   background-position: 0px -34px;
   /* display: none; */
 }
 
+.spinWheels {
+  animation: spinWheels .15s ease-in-out infinite;
+}
+
+.stopSpinWheels {
+  animation: spinWheels .15s ease-in-out infinite;
+}
+
+
+/* PAY TABLE */
+
+@keyframes showPayTable {
+  0% {
+    transform: scale(0, 0) translateX(0px);
+  }
+  50% {
+    transform: scale(0.5, 0.5) translateX(30%);
+  }
+  100% {
+    transform: scale(1, 1) translateX(0px);
+    z-index: 99999;
+  }
+}
+
+.showPaytable {
+  animation: showPayTable .4s ease-in-out;
+}

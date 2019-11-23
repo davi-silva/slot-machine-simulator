@@ -26,18 +26,18 @@ export const Wrapper = styled.div`
 
 export const Title = styled.h1`
   font-size: 16px;
-  color: #0058e4;
+  color: #6d00e4;
   display: table;
   margin: 0 auto 10px auto;
   font-weight: 900;
 `;
 
 export const Input = styled.input`
-  color: #0058e4;
+  color: #6d00e4;
   font-size: 16px;
   border-top: none;
   border-right: none;
-  border-bottom: 1px solid #0058e4;
+  border-bottom: 1px solid #6d00e4;
   border-left: none;
   width: 80%;
   display: table;

@@ -118,7 +118,7 @@ export const SlotOverlay = styled.div`
   position: absolute;
   top: 0;
   width: 100%;
-  z-index: 3;
+  z-index: 0;
 `;
 
 export const SlotOverlayLine = styled.div`
@@ -140,12 +140,32 @@ export const SlotCredits = styled.div`
   z-index: 2;
 `;
 
+export const Credits = styled.input`
+  color: #78FF00;
+  font-weight: bold;
+  height: 40px;
+  font-size: 20px;
+  letter-spacing: 15px;
+  font-family: "Courier New",Courier,monospace;
+  z-index: 9999;
+  text-align: right;
+  background: transparent;
+  border: none;
+  &:focus {
+    outline: none;
+  }
+`;
+
 export const SlotZeros = styled.div`
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255,255,255,0.3);
   font-size: 20px;
   margin-top: 6px;
-  margin-left: -51px;
+  width: 149px!important;
+  font-family: "Courier New",Courier,monospace;
+  margin-left: 35px;
+  text-align: left;
   letter-spacing: 16px;
+  transform: scaleX(1);
   z-index: 1;
 `;
 
@@ -166,6 +186,14 @@ export const SlotWheels = styled.div`
   #wheel3 {
     left: 258px!important;
   }
+`;
+
+export const WinningLine = styled.div`
+  height: 3px;
+  width: 150px;
+  border-radius: 10px;
+  position: fixed;
+  z-index: 99;
 `;
 
 export const Wheel = styled.div`
@@ -194,7 +222,6 @@ export const WheelImage = styled.img`
   max-width: 87px;
   display: table;
   margin: 0 auto;
-  transform: translateY(-28px);
 `;
 
 export const SlotTrigger = styled.div`
@@ -226,6 +253,18 @@ export const Arm = styled.div`
 export const Knob = styled.div`
   background: #ff6363;
   background: radial-gradient(ellipse at center, #ff6363 0%,#cf0404 100%);
+  border-radius: 10px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+  height: 16px;
+  left: -7px;
+  top: -15px;
+  width: 20px;
+  z-index: 4;
+`;
+
+export const BlueKnob = styled.div`
+  background: #0062ff;
+  background: radial-gradient(ellipse at center, #9000e4 0%,#0062ff 100%);
   border-radius: 10px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
   height: 16px;
@@ -296,4 +335,81 @@ export const RingShadow2 = styled.div`
   top: 0;
   width: 19px;
   z-index: 1;
+`;
+
+export const BalanceTitle = styled.b`
+  color: #6d00e4;
+  letter-spacing: 1px;
+  font-size: 14px;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+`;
+
+export const Balance = styled.h4`
+  color: #333;
+  font-family: "Courier New",Courier,monospace;
+  top: 14%;
+  text-align: center;
+  font-size: 27px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+  letter-spacing: 1px;
+  width: 200px;
+`;
+
+export const CheckboxContainer = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+  top: 27%;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+`;
+
+export const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
+  border: 0;
+  clip: rect(0 0 0 0);
+  clippath: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+`;
+
+export const Icon = styled.svg`
+  fill: none;
+  stroke: white;
+  stroke-width: 2px;
+  margin-top: -9px;
+`;
+
+export const StyledCheckbox = styled.div`
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: #6d00e4;
+  border-radius: 3px;
+  transition: all 150ms;
+
+  ${HiddenCheckbox}:focus + & {
+    box-shadow: 0 0 0 3px pink;
+  }
+  ${Icon} {
+    visibility: ${(props) => (props.checked ? 'visible' : 'hidden')}
+  }
+`;
+
+export const DebugTitle = styled.b`
+  color: #333;
+  font-size: 14px;
+  top: 24%;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
 `;
