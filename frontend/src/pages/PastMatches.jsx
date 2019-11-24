@@ -158,7 +158,7 @@ export default class LeaderBoard extends Component {
                         display: 'inline',
                         position: 'absolute',
                         top: '29px',
-                        left: '82px',
+                        left: '93px',
                       }}
                     >
 Player Name
@@ -168,7 +168,7 @@ Player Name
                         display: 'inline',
                         position: 'absolute',
                         top: '29px',
-                        left: '238px',
+                        left: '246px',
                       }}
                     >
 Total Balance
@@ -178,7 +178,7 @@ Total Balance
                         display: 'inline',
                         position: 'absolute',
                         top: '29px',
-                        left: '438px',
+                        left: '447px',
                       }}
                     >
 Date

@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import {
   GamesLi,
   Cell,
+  Info,
 } from '../../../styled-components/past-matches.styled-components';
 
 export default class LeardboardList extends Component {
@@ -72,13 +73,31 @@ export default class LeardboardList extends Component {
       <>
         <GamesLi>
           <Cell>
-            {playerName}
-          </Cell>
-          <Cell>
-            {totalBalance}
-          </Cell>
-          <Cell>
-            {playedOn}
+            <div className="container p-0">
+              <div
+                className="row"
+                style={{
+                  width: '100%',
+                  marginLeft: '0px',
+                }}
+              >
+                <div className="col-4 p-0">
+                  <Info>
+                    {playerName}
+                  </Info>
+                </div>
+                <div className="col-4 p-0">
+                  <Info>
+                    {totalBalance}
+                  </Info>
+                </div>
+                <div className="col-4 p-0">
+                  <Info>
+                    {playedOn}
+                  </Info>
+                </div>
+              </div>
+            </div>
           </Cell>
         </GamesLi>
       </>

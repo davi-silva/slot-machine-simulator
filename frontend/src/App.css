@@ -15,6 +15,25 @@ body {
   color: #fff;
 }
 
+body::-webkit-scrollbar {
+	height: 5px;
+	width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #0058e4 0%, #9000e4 100%);
+  border: none;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+	background: linear-gradient(to top, #0058e4 0%, #9000e4 100%);;
+}
+
+
 /* SLOT MACHINE */
 
 @keyframes blink {

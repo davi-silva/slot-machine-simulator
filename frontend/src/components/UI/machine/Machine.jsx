@@ -103,7 +103,7 @@ export default class Machine extends Component {
     this.getRoundsByPlayer = this.getRoundsByPlayer.bind(this);
     this.submitFullGameResult = this.submitFullGameResult.bind(this);
     this.endGame = this.endGame.bind(this);
-    this.onShowPaytable = this.onShowPaytable.bind(this);
+    this.ShowPaytable = this.ShowPaytable.bind(this);
   }
 
 
@@ -146,7 +146,8 @@ export default class Machine extends Component {
     }
   }
 
-  onShowPaytable() {
+  ShowPaytable() {
+    console.log('ShowPaytable');
     const {
       showPayTable,
     } = this.state;
@@ -630,79 +631,94 @@ export default class Machine extends Component {
 
     if (cherriesAmountTop === 3) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 2000,
       });
     }
     if (cherriesAmountCenter === 3) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 1000,
       });
     }
     if (cherriesAmountBottom === 3) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 4000,
       });
     }
-    if (sevensAmountTop === 3 || sevensAmountCenter === 3 || sevensAmountBottom === 3) {
+    if (sevensAmountTop === 3) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 150,
       });
     }
+    if (sevensAmountCenter === 3) {
+      this.blink(balanceRef);
+      this.setStateAsync({
+        balance: balance + 150,
+      });
+    }
+    if (sevensAmountBottom === 3) {
+      this.blink(balanceRef);
+      this.setStateAsync({
+        balance: balance + 150,
+      });
+    }
+
     if (sevensAmountBottom === 2 && cherriesAmountBottom === 1) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 75,
       });
     }
     if (sevensAmountBottom === 1 && cherriesAmountBottom === 2) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 75,
       });
     }
     if (bar3AmountTop === 3 || bar3AmountCenter === 3 || bar3AmountBottom === 3) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 50,
       });
     }
     if (bar2AmountTop === 3 || bar2AmountCenter === 3 || bar2AmountBottom === 3) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 20,
       });
     }
     if (barAmountTop === 3 || barAmountCenter === 3 || barAmountBottom === 3) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 10,
       });
     }
     if (barAmountTop > 0 && barAmountTop < 3) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 5,
       });
     }
     if (barAmountCenter > 0 && barAmountCenter < 3) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 5,
       });
     }
     if (barAmountBottom > 0 && barAmountBottom < 3) {
       this.blink(balanceRef);
-      this.setState({
+      this.setStateAsync({
         balance: balance + 5,
       });
     }
 
+    console.log('Before end game:', balance);
+
     setTimeout(() => {
-      this.setState({
+      this.setStateAsync({
         triggerDisabled: false,
       });
       slotTrigger.classList.remove('slotTriggerDisabled');
@@ -724,8 +740,15 @@ export default class Machine extends Component {
         rounds: allRoundsPlayed,
         totalBalance: balance,
       };
+      console.log('totalBalance:', balance);
       this.endGame(game);
     }
+  }
+
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve);
+    });
   }
 
   addCredit(incrementCredits) {
@@ -1038,7 +1061,9 @@ export default class Machine extends Component {
     if (showPayTable) {
       paytable = (
         <>
-          <PayTable />
+          <PayTable
+            ShowPaytable={this.ShowPaytable}
+          />
         </>
       );
     } else {
@@ -1103,7 +1128,7 @@ export default class Machine extends Component {
         <ShowPaytable
           type="button"
           value="Pay Table"
-          onMouseDown={this.onShowPaytable}
+          onMouseDown={this.ShowPaytable}
         />
         {paytable}
       </>

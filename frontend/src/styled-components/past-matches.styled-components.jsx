@@ -73,7 +73,7 @@ export const GamesLi = styled.li`
 export const Cell = styled.div`
     background: #fff;
     display: inline-block;
-    width: 31%;
+    width: 100%;
     margin: 5px 4px;
     border-radius: 3px;
     text-align: center;
@@ -92,4 +92,11 @@ export const LoadingAllContent = styled.div`
         display: table;
         margin: 25px auto;
     }
+`;
+
+export const Info = styled.p`
+    color: #333;
+    font-size: 15px;
+    display: table;
+    margin: 0 auto;
 `;
