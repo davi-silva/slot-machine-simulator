@@ -218,3 +218,23 @@ body {
 .showPaytable {
   animation: showPayTable .4s ease-in-out;
 }
+
+.BAR3 {
+  transform: translateY(-28px)!important;
+}
+
+.BAR {
+  transform: translateY(-87px)!important;
+}
+
+.BAR2 {
+  transform: translateY(-144px)!important;
+}
+
+.SEVEN {
+  transform: translateY(-209px)!important;
+}
+
+.CHERRY {
+  transform: translateY(-270px)!important;
+}

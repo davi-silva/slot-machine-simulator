@@ -222,6 +222,7 @@ export const WheelImage = styled.img`
   max-width: 87px;
   display: table;
   margin: 0 auto;
+  transform: translateY(-28px);
 `;
 
 export const SlotTrigger = styled.div`
@@ -412,4 +413,28 @@ export const DebugTitle = styled.b`
   left: 50%;
   transform: translateX(-50%);
   position: fixed;
+`;
+
+export const ShowPaytable = styled.input`
+  background-image: linear-gradient(to right, #0058e4 0%, #9000e4 100%);
+  background-size: 200% auto;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  display: table;
+  position: fixed;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, 227%);
+  padding: 8px 30px;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.3);
+  transition: all .2s ease-in;
+  user-select: none;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    background-position: right center;
+  }
 `;

@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 
 import PlayerModal from '../components/UI/player/Player';
 import Machine from '../components/UI/machine/Machine';
-import PayTable from '../components/UI/paytable/PayTable';
-
-import {
-  ShowPaytable,
-} from '../styled-components/slot-machine.styled-components';
 
 export default class SlotMachine extends Component {
   constructor(props) {
@@ -63,14 +58,6 @@ export default class SlotMachine extends Component {
       slotMachine = (
         <>
           <Machine playerInfo={playerInfo} />
-          {/* <PayTable
-            style={{
-              display: 'none!important',
-            }}
-          />
-          <ShowPaytable>
-            Show Pay Table
-          </ShowPaytable> */}
         </>
       );
     }

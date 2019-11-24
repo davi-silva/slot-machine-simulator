@@ -11,6 +11,7 @@ import BAR3 from '../../../static/img/3xBAR.png';
 import Seven from '../../../static/img/7.png';
 import Cherry from '../../../static/img/Cherry.png';
 
+import PayTable from '../paytable/PayTable';
 
 import {
   SlotMachine,
@@ -46,6 +47,7 @@ import {
   Icon,
   BalanceTitle,
   Balance,
+  ShowPaytable,
 } from '../../../styled-components/machine.styled-components';
 
 export default class Machine extends Component {
@@ -66,6 +68,7 @@ export default class Machine extends Component {
       spin: [0, 0, 0],
       credits: 15,
       balance: 0,
+      showPayTable: false,
       winningLine: [],
       triggerDisabled: false,
       spinningWheel1Styled: {
@@ -100,6 +103,7 @@ export default class Machine extends Component {
     this.getRoundsByPlayer = this.getRoundsByPlayer.bind(this);
     this.submitFullGameResult = this.submitFullGameResult.bind(this);
     this.endGame = this.endGame.bind(this);
+    this.onShowPaytable = this.onShowPaytable.bind(this);
   }
 
 
@@ -138,6 +142,21 @@ export default class Machine extends Component {
       }
       this.setState({
         credits: e.target.value,
+      });
+    }
+  }
+
+  onShowPaytable() {
+    const {
+      showPayTable,
+    } = this.state;
+    if (showPayTable) {
+      this.setState({
+        showPayTable: false,
+      });
+    } else {
+      this.setState({
+        showPayTable: true,
       });
     }
   }
@@ -343,6 +362,7 @@ export default class Machine extends Component {
       wheel2,
       wheel3,
     } = this.refs;
+
     const { spinning } = this.state;
     if (wheelNumber === 1) {
       this.unblur(wheel1);
@@ -387,7 +407,34 @@ export default class Machine extends Component {
       slotTrigger,
       slotCredit,
       balanceRef,
+      wheel1,
+      wheel2,
+      wheel3,
     } = this.refs;
+    const wheelChild1 = wheel1.childNodes;
+    const wheelChild2 = wheel2.childNodes;
+    const wheelChild3 = wheel3.childNodes;
+    const wheel1Imgs = [
+      wheelChild1[1],
+      wheelChild1[2],
+      wheelChild1[3],
+      wheelChild1[4],
+      wheelChild1[5],
+    ];
+    const wheel2Imgs = [
+      wheelChild2[1],
+      wheelChild2[2],
+      wheelChild2[3],
+      wheelChild2[4],
+      wheelChild2[5],
+    ];
+    const wheel3Imgs = [
+      wheelChild3[1],
+      wheelChild3[2],
+      wheelChild3[3],
+      wheelChild3[4],
+      wheelChild3[5],
+    ];
 
     const playerCombTop = [];
     const spinTop = spin;
@@ -423,23 +470,91 @@ export default class Machine extends Component {
     let bar2AmountTop = 0;
     let cherriesAmountTop = 0;
     let sevensAmountTop = 0;
+    let count = 0;
     playerCombTop.forEach((symbol) => {
       if (symbol === 'bar3') {
         bar3AmountTop += 1;
+        if (count === 0) {
+          wheel1Imgs.forEach((img) => {
+            img.classList.add('BAR3');
+          });
+        } else if (count === 1) {
+          wheel2Imgs.forEach((img) => {
+            img.classList.add('BAR3');
+          });
+        } else if (count === 2) {
+          wheel3Imgs.forEach((img) => {
+            img.classList.add('BAR3');
+          });
+        }
       }
       if (symbol === 'bar') {
         barAmountTop += 1;
+        if (count === 0) {
+          wheel1Imgs.forEach((img) => {
+            img.classList.add('BAR');
+          });
+        } else if (count === 1) {
+          wheel2Imgs.forEach((img) => {
+            img.classList.add('BAR');
+          });
+        } else if (count === 2) {
+          wheel3Imgs.forEach((img) => {
+            img.classList.add('BAR');
+          });
+        }
       }
       if (symbol === 'bar2') {
         bar2AmountTop += 1;
+        if (count === 0) {
+          wheel1Imgs.forEach((img) => {
+            img.classList.add('BAR2');
+          });
+        } else if (count === 1) {
+          wheel2Imgs.forEach((img) => {
+            img.classList.add('BAR2');
+          });
+        } else if (count === 2) {
+          wheel3Imgs.forEach((img) => {
+            img.classList.add('BAR2');
+          });
+        }
       }
       if (symbol === 'seven') {
         sevensAmountTop += 1;
+        if (count === 0) {
+          wheel1Imgs.forEach((img) => {
+            img.classList.add('SEVEN');
+          });
+        } else if (count === 1) {
+          wheel2Imgs.forEach((img) => {
+            img.classList.add('SEVEN');
+          });
+        } else if (count === 2) {
+          wheel3Imgs.forEach((img) => {
+            img.classList.add('SEVEN');
+          });
+        }
       }
       if (symbol === 'cherry') {
         cherriesAmountTop += 1;
+        if (count === 0) {
+          wheel1Imgs.forEach((img) => {
+            img.classList.add('CHERRY');
+          });
+        } else if (count === 1) {
+          wheel2Imgs.forEach((img) => {
+            img.classList.add('CHERRY');
+          });
+        } else if (count === 2) {
+          wheel3Imgs.forEach((img) => {
+            img.classList.add('CHERRY');
+          });
+        }
       }
+      count += 1;
     });
+
 
     if (sevensAmountTop === 2 && cherriesAmountTop === 1) {
       this.blink(balanceRef);
@@ -458,6 +573,7 @@ export default class Machine extends Component {
     let bar2AmountCenter = 0;
     let cherriesAmountCenter = 0;
     let sevensAmountCenter = 0;
+    console.log('playerCombCenter:', playerCombCenter);
     playerCombCenter.forEach((symbol) => {
       if (symbol === 'bar3') {
         bar3AmountCenter += 1;
@@ -475,6 +591,7 @@ export default class Machine extends Component {
         cherriesAmountCenter += 1;
       }
     });
+
 
     if (sevensAmountCenter === 2 && cherriesAmountCenter === 1) {
       this.blink(balanceRef);
@@ -598,6 +715,8 @@ export default class Machine extends Component {
       mainCombination: playerCombCenter,
       bottomCombination: playerCombBottom,
     };
+    const responseRound = await this.submitRound(round);
+    console.log('responseRound:', responseRound);
     if (credits <= 0 || credits === '0') {
       const allRoundsPlayed = await this.getRoundsByPlayer(playerInfo._id);
       const game = {
@@ -612,7 +731,6 @@ export default class Machine extends Component {
   addCredit(incrementCredits) {
     const { credits } = this.state;
     const { slotCredit } = this.refs;
-    const currentCredits = credits;
     this.setState({
       credits: credits + incrementCredits,
     });
@@ -716,11 +834,13 @@ export default class Machine extends Component {
       zeros,
       balance,
       triggerDisabled,
+      showPayTable,
     } = this.state;
     let spinningWheel1;
     let spinningWheel2;
     let spinningWheel3;
     let disabledInput;
+    let paytable;
 
     if (debugMode) {
       disabledInput = (
@@ -776,9 +896,6 @@ export default class Machine extends Component {
           <Wheel
             ref="wheel1"
             id="wheel1"
-            style={
-              spinningWheel1Styled
-            }
           >
             <WheelOverlay />
             <WheelImage src={Cherry} className="slotSpinAnimation" />
@@ -817,9 +934,6 @@ export default class Machine extends Component {
           <Wheel
             ref="wheel2"
             id="wheel2"
-            style={
-              spinningWheel2Styled
-            }
           >
             <WheelOverlay />
             <WheelImage src={Cherry} className="slotSpinAnimation" />
@@ -858,9 +972,6 @@ export default class Machine extends Component {
           <Wheel
             ref="wheel3"
             id="wheel3"
-            style={
-              spinningWheel3Styled
-            }
           >
             <WheelOverlay />
             <WheelImage src={Cherry} className="slotSpinAnimation" />
@@ -924,11 +1035,24 @@ export default class Machine extends Component {
       );
     }
 
+    if (showPayTable) {
+      paytable = (
+        <>
+          <PayTable />
+        </>
+      );
+    } else {
+      paytable = (
+        <>
+        </>
+      );
+    }
+
 
     return (
       <>
         <BalanceTitle>
-          BALANCE
+        BALANCE
         </BalanceTitle>
         <Balance ref="balanceRef">
           {balance}
@@ -960,7 +1084,7 @@ export default class Machine extends Component {
         </SlotMachine>
         <MachineFeet />
         <DebugTitle>
-          DEBUG
+        DEBUG
         </DebugTitle>
         <Checkbox
           checked={debugMode}
@@ -976,6 +1100,12 @@ export default class Machine extends Component {
             position: 'fixed',
           }}
         />
+        <ShowPaytable
+          type="button"
+          value="Pay Table"
+          onMouseDown={this.onShowPaytable}
+        />
+        {paytable}
       </>
     );
   }
