@@ -438,3 +438,23 @@ export const ShowPaytable = styled.input`
     background-position: right center;
   }
 `;
+
+export const ShowCombinationSelectorButton = styled.button`
+  color: #fff;
+  font-weight: 900;
+  font-size: 11px;
+  border: none;
+  top: 57.8%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background: none;
+  z-index: 999;
+  transition: all .1s ease-in-out;
+  &:active {
+    color: transparent;
+  }
+  &:focus {
+    outline: none;
+  }
+`;

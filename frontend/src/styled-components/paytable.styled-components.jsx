@@ -1,6 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 import styled from 'styled-components';
 
+import { blinkPayTable } from './animations';
+
 export const Paytable = styled.div`
   height: 500px;
   width: 300px;
@@ -39,6 +41,17 @@ export const Li = styled.li`
   box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
   margin-bottom: 6px;
+`;
+
+export const LiBlink = styled.li`
+  width: 100%;
+  height: 50px;
+  list-style: none;
+  border-radius: 5px;
+  margin-bottom: 6px;
+  background: #fff453;
+  box-shadow: inset 0px 0px 5px rgba(255, 156, 0, 0.5);
+  animation: ${blinkPayTable} 0.7s ease-in-out forwards;
 `;
 
 export const Line = styled.div`

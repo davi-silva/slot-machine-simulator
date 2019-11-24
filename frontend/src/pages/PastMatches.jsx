@@ -30,7 +30,6 @@ export default class LeaderBoard extends Component {
 
   async componentDidMount() {
     const gamesList = await this.getFirstGames();
-    console.log('gamesList:', gamesList);
     let more = true;
     if (gamesList.length < 10) {
       more = false;
@@ -61,40 +60,6 @@ export default class LeaderBoard extends Component {
       this.setState(state, resolve);
     });
   }
-
-  // async getMoreGames() {
-  //   const { page, gamesList } = this.state;
-  //   this.response = await fetch(`http://localhost:5000/games/?page=${page}`, {
-  //     method: 'GET',
-  //     mode: 'cors',
-  //     cache: 'no-cache',
-  //     credentials: 'same-origin',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   });
-  //   const data = await this.response.json();
-  //   if (data.length < 10) {
-  //     this.setStateAsync({
-  //       podcasts: gamesList.concat(data),
-  //     });
-  //     setTimeout(() => {
-  //       this.setStateAsync({
-  //         hasMore: false,
-  //       });
-  //     }, 10);
-  //   } else {
-  //     this.setStateAsync({
-  //       page: page + 1,
-  //     });
-
-  //     console.log('data getMoreGames:', data);
-  //     this.setStateAsync({
-  //       gamesList: gamesList.concat(data),
-  //     });
-  //   }
-  // }
-
 
   render() {
     const { gamesList, hasMore } = this.state;

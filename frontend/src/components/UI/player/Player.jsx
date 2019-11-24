@@ -36,7 +36,6 @@ export default class Player extends Component {
         name: player,
       };
       const playerInfo = await this.createNewPlayer(playerName);
-      console.log('playerInfo', playerInfo);
       const handleSetPlayerInfo = setPlayer;
       handleSetPlayerInfo(playerInfo);
       handlerHideModal();
@@ -85,7 +84,6 @@ export default class Player extends Component {
   }
 
   async checkPlayNameAvailability(playerName) {
-    console.log('playerName:', playerName);
     this.response = await fetch(
       `http://localhost:5000/players/validation/name/${playerName}`,
       {

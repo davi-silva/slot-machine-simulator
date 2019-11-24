@@ -12,6 +12,7 @@ import Seven from '../../../static/img/7.png';
 import Cherry from '../../../static/img/Cherry.png';
 
 import PayTable from '../paytable/PayTable';
+import CombinationSelector from '../combination-selection/CombinationSelector';
 
 import {
   SlotMachine,
@@ -21,13 +22,12 @@ import {
   SlotFrame,
   SlotGlazeBottom,
   SlotDisplay,
-  SlotOverlay,
   SlotOverlayLine,
   SlotCredits,
   Credits,
   SlotZeros,
   SlotWheels,
-  WinningLine,
+  // WinningLine,
   Wheel,
   WheelOverlay,
   WheelImage,
@@ -48,15 +48,13 @@ import {
   BalanceTitle,
   Balance,
   ShowPaytable,
+  ShowCombinationSelectorButton,
 } from '../../../styled-components/machine.styled-components';
 
 export default class Machine extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      game: null,
-      round: null,
-      startGame: false,
       debugMode: false,
       zeros: '0000000000',
       slots: [
@@ -69,6 +67,7 @@ export default class Machine extends Component {
       credits: 15,
       balance: 0,
       showPayTable: false,
+      showCombinationSelector: false,
       winningLine: [],
       triggerDisabled: false,
       spinningWheel1Styled: {
@@ -86,10 +85,22 @@ export default class Machine extends Component {
           transform: 'translateY(-28px)',
         },
       },
+      paytableRow: {
+        cherryTop: false,
+        cherryCenter: false,
+        cherryBottom: false,
+        sevens: false,
+        sevenCherry: false,
+        cherrySeven: false,
+        bars3: false,
+        bars2: false,
+        bars: false,
+        barsAny: false,
+      },
     };
     this.componentDidMount = this.componentDidMount.bind(this);
     this.startSlot = this.startSlot.bind(this);
-    this.endSlot = this.endSlot.bind(this);
+    // this.endSlot = this.endSlot.bind(this);
     this.addCredit = this.addCredit.bind(this);
     this.spin = this.spin.bind(this);
     this.blink = this.blink.bind(this);
@@ -104,6 +115,7 @@ export default class Machine extends Component {
     this.submitFullGameResult = this.submitFullGameResult.bind(this);
     this.endGame = this.endGame.bind(this);
     this.ShowPaytable = this.ShowPaytable.bind(this);
+    this.ShowCombinationSelector = this.ShowCombinationSelector.bind(this);
   }
 
 
@@ -146,22 +158,6 @@ export default class Machine extends Component {
     }
   }
 
-  ShowPaytable() {
-    console.log('ShowPaytable');
-    const {
-      showPayTable,
-    } = this.state;
-    if (showPayTable) {
-      this.setState({
-        showPayTable: false,
-      });
-    } else {
-      this.setState({
-        showPayTable: true,
-      });
-    }
-  }
-
   async getRoundsByPlayer(player) {
     const response = await fetch(
       `http://localhost:5000/rounds/all/player/${player}`,
@@ -179,217 +175,10 @@ export default class Machine extends Component {
     return data;
   }
 
-  async endGame(game) {
-    const response = await fetch(
-      'http://localhost:5000/games/play',
-      {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(game),
-      },
-    );
-    const data = await response.json();
-    return data;
-  }
-
-  startSlot() {
-    this.setState({
-      spinning: false,
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve);
     });
-    const {
-      slotTrigger,
-    } = this.refs;
-    slotTrigger.classList.remove('slotTriggerDisabled');
-    return false;
-  }
-
-  endSlot() {
-    const { spinning } = this.state;
-    this.setState({
-
-    });
-  }
-
-  async spin() {
-    const {
-      wheel1,
-      wheel2,
-      wheel3,
-      slotTrigger,
-      creditInput,
-      slotZeros,
-    } = this.refs;
-    const {
-      spin,
-      spinning,
-      credits,
-      triggerDisabled,
-    } = this.state;
-
-    if (!triggerDisabled) {
-      const wheelChild1 = wheel1.childNodes;
-      const wheelChild2 = wheel2.childNodes;
-      const wheelChild3 = wheel3.childNodes;
-      const wheel1Imgs = [
-        wheelChild1[1],
-        wheelChild1[2],
-        wheelChild1[3],
-        wheelChild1[4],
-        wheelChild1[5],
-      ];
-      const wheel2Imgs = [
-        wheelChild2[1],
-        wheelChild2[2],
-        wheelChild2[3],
-        wheelChild2[4],
-        wheelChild2[5],
-      ];
-      const wheel3Imgs = [
-        wheelChild3[1],
-        wheelChild3[2],
-        wheelChild3[3],
-        wheelChild3[4],
-        wheelChild3[5],
-      ];
-
-      let tempCredits = credits;
-      // this.blink(slotCredit);
-      wheel1Imgs.forEach((img) => {
-        img.classList.remove('spinWheels');
-      });
-
-      wheel2Imgs.forEach((img) => {
-        img.classList.remove('spinWheels');
-      });
-
-      wheel2Imgs.forEach((img) => {
-        img.classList.remove('spinWheels');
-      });
-
-
-      setTimeout(() => {
-        this.blur(wheel1);
-        wheel1Imgs.forEach((img) => {
-          img.classList.add('spinWheels');
-        });
-      }, 200);
-
-      setTimeout(() => {
-        this.blur(wheel2);
-        wheel2Imgs.forEach((img) => {
-          img.classList.add('spinWheels');
-        });
-      }, 700);
-
-      setTimeout(() => {
-        this.blur(wheel3);
-        wheel3Imgs.forEach((img) => {
-          img.classList.add('spinWheels');
-        });
-      }, 1200);
-
-      if (spinning === false) {
-        this.blink(creditInput);
-        this.blink(slotZeros);
-        this.setState({
-          spinning: 3,
-          credits: credits - 1,
-        });
-        tempCredits -= 1;
-        if (tempCredits.toString().length === 1) {
-          this.setState({
-            zeros: '00000000000',
-          });
-        }
-        if (tempCredits.toString().length === 2) {
-          this.setState({
-            zeros: '0000000000',
-          });
-        }
-        if (tempCredits.toString().length === 3) {
-          this.setState({
-            zeros: '000000000',
-          });
-        }
-        if (tempCredits.toString().length === 4) {
-          this.setState({
-            zeros: '00000000',
-          });
-        }
-        spin[0] = parseInt(Math.random() * 5, 10);
-        spin[1] = parseInt(Math.random() * 5, 10);
-        spin[2] = parseInt(Math.random() * 5, 10);
-        this.setState({
-          triggerDisabled: true,
-        });
-        slotTrigger.classList.add('slotTriggerDisabled');
-        setTimeout(() => {
-          this.stopSpin(1);
-          wheel1Imgs.forEach((img) => {
-            img.classList.remove('spinWheels');
-          });
-        }, 2000);
-
-        setTimeout(() => {
-          this.stopSpin(2);
-          wheel2Imgs.forEach((img) => {
-            img.classList.remove('spinWheels');
-          });
-        }, 2500);
-
-        setTimeout(() => {
-          this.stopSpin(3);
-          wheel3Imgs.forEach((img) => {
-            img.classList.remove('spinWheels');
-          });
-        }, 3000);
-
-        setTimeout(() => {
-          this.stopSpin(4);
-        }, 3500);
-      }
-    }
-    return false;
-  }
-
-  stopSpin(wheelNumber) {
-    const {
-      wheel1,
-      wheel2,
-      wheel3,
-    } = this.refs;
-
-    const { spinning } = this.state;
-    if (wheelNumber === 1) {
-      this.unblur(wheel1);
-      this.setState({
-        spinning: spinning - 1,
-      });
-    }
-    if (wheelNumber === 2) {
-      this.unblur(wheel2);
-      this.setState({
-        spinning: spinning - 1,
-      });
-    }
-    if (wheelNumber === 3) {
-      this.unblur(wheel3);
-      this.setState({
-        spinning: spinning - 1,
-      });
-    }
-    if (wheelNumber === 4) {
-      this.setState({
-        spinning: false,
-      });
-
-      this.endSpin();
-    }
   }
 
   async endSpin() {
@@ -398,6 +187,7 @@ export default class Machine extends Component {
       spin,
       credits,
       balance,
+      paytableRow,
     } = this.state;
 
     const {
@@ -454,6 +244,8 @@ export default class Machine extends Component {
       slots[1][spinCenter[1]],
       slots[2][spinCenter[2]],
     ];
+
+    console.log('playerCombCenter:', playerCombCenter);
 
     const playerCombBottom = [];
     const spinBottom = spin;
@@ -574,7 +366,6 @@ export default class Machine extends Component {
     let bar2AmountCenter = 0;
     let cherriesAmountCenter = 0;
     let sevensAmountCenter = 0;
-    console.log('playerCombCenter:', playerCombCenter);
     playerCombCenter.forEach((symbol) => {
       if (symbol === 'bar3') {
         bar3AmountCenter += 1;
@@ -633,36 +424,108 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 2000,
+        paytableRow: {
+          cherryTop: true,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
     if (cherriesAmountCenter === 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 1000,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: true,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
     if (cherriesAmountBottom === 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 4000,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: true,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
     if (sevensAmountTop === 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 150,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: true,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
     if (sevensAmountCenter === 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 150,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: true,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
     if (sevensAmountBottom === 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 150,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: true,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
 
@@ -670,52 +533,265 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 75,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: true,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
     if (sevensAmountBottom === 1 && cherriesAmountBottom === 2) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 75,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: true,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
-    if (bar3AmountTop === 3 || bar3AmountCenter === 3 || bar3AmountBottom === 3) {
+    if (bar3AmountTop === 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 50,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: true,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
-    if (bar2AmountTop === 3 || bar2AmountCenter === 3 || bar2AmountBottom === 3) {
+
+    if (bar3AmountCenter === 3) {
+      this.blink(balanceRef);
+      this.setStateAsync({
+        balance: balance + 50,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: true,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
+      });
+    }
+
+    if (bar3AmountBottom === 3) {
+      this.blink(balanceRef);
+      this.setStateAsync({
+        balance: balance + 50,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: true,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
+      });
+    }
+
+    if (bar2AmountTop === 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 20,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: true,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
-    if (barAmountTop === 3 || barAmountCenter === 3 || barAmountBottom === 3) {
+
+    if (bar2AmountCenter === 3) {
+      this.blink(balanceRef);
+      this.setStateAsync({
+        balance: balance + 20,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: true,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
+      });
+    }
+
+    if (bar2AmountBottom === 3) {
+      this.blink(balanceRef);
+      this.setStateAsync({
+        balance: balance + 20,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: true,
+          bars: paytableRow.bars,
+          barsAny: paytableRow.barsAny,
+        },
+      });
+    }
+
+    if (barAmountTop === 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 10,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: true,
+          barsAny: paytableRow.barsAny,
+        },
       });
     }
+
+    if (barAmountCenter === 3) {
+      this.blink(balanceRef);
+      this.setStateAsync({
+        balance: balance + 10,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: true,
+          barsAny: paytableRow.barsAny,
+        },
+      });
+    }
+
+    if (barAmountBottom === 3) {
+      this.blink(balanceRef);
+      this.setStateAsync({
+        balance: balance + 10,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: true,
+          barsAny: paytableRow.barsAny,
+        },
+      });
+    }
+
     if (barAmountTop > 0 && barAmountTop < 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 5,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: true,
+        },
       });
     }
+
     if (barAmountCenter > 0 && barAmountCenter < 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 5,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: true,
+        },
       });
     }
+
     if (barAmountBottom > 0 && barAmountBottom < 3) {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: balance + 5,
+        paytableRow: {
+          cherryTop: paytableRow.cherryTop,
+          cherryCenter: paytableRow.cherryCenter,
+          cherryBottom: paytableRow.cherryBottom,
+          sevens: paytableRow.sevens,
+          sevenCherry: paytableRow.sevenCherry,
+          cherrySeven: paytableRow.cherrySeven,
+          bars3: paytableRow.bars3,
+          bars2: paytableRow.bars2,
+          bars: paytableRow.bars,
+          barsAny: true,
+        },
       });
     }
-
-    console.log('Before end game:', balance);
 
     setTimeout(() => {
       this.setStateAsync({
@@ -731,8 +807,7 @@ export default class Machine extends Component {
       mainCombination: playerCombCenter,
       bottomCombination: playerCombBottom,
     };
-    const responseRound = await this.submitRound(round);
-    console.log('responseRound:', responseRound);
+    this.submitRound(round);
     if (credits <= 0 || credits === '0') {
       const allRoundsPlayed = await this.getRoundsByPlayer(playerInfo._id);
       const game = {
@@ -740,15 +815,255 @@ export default class Machine extends Component {
         rounds: allRoundsPlayed,
         totalBalance: balance,
       };
-      console.log('totalBalance:', balance);
       this.endGame(game);
     }
   }
 
-  setStateAsync(state) {
-    return new Promise((resolve) => {
-      this.setState(state, resolve);
+  stopSpin(wheelNumber) {
+    const {
+      wheel1,
+      wheel2,
+      wheel3,
+    } = this.refs;
+
+    const { spinning } = this.state;
+    if (wheelNumber === 1) {
+      this.unblur(wheel1);
+      this.setState({
+        spinning: spinning - 1,
+      });
+    }
+    if (wheelNumber === 2) {
+      this.unblur(wheel2);
+      this.setState({
+        spinning: spinning - 1,
+      });
+    }
+    if (wheelNumber === 3) {
+      this.unblur(wheel3);
+      this.setState({
+        spinning: spinning - 1,
+      });
+    }
+    if (wheelNumber === 4) {
+      this.setState({
+        spinning: false,
+      });
+
+      this.endSpin();
+    }
+  }
+
+  async spin() {
+    const {
+      wheel1,
+      wheel2,
+      wheel3,
+      slotTrigger,
+      creditInput,
+      slotZeros,
+    } = this.refs;
+    const {
+      spin,
+      spinning,
+      credits,
+      triggerDisabled,
+    } = this.state;
+
+    if (!triggerDisabled) {
+      const wheelChild1 = wheel1.childNodes;
+      const wheelChild2 = wheel2.childNodes;
+      const wheelChild3 = wheel3.childNodes;
+      const wheel1Imgs = [
+        wheelChild1[1],
+        wheelChild1[2],
+        wheelChild1[3],
+        wheelChild1[4],
+        wheelChild1[5],
+      ];
+      const wheel2Imgs = [
+        wheelChild2[1],
+        wheelChild2[2],
+        wheelChild2[3],
+        wheelChild2[4],
+        wheelChild2[5],
+      ];
+      const wheel3Imgs = [
+        wheelChild3[1],
+        wheelChild3[2],
+        wheelChild3[3],
+        wheelChild3[4],
+        wheelChild3[5],
+      ];
+
+      let tempCredits = credits;
+      // this.blink(slotCredit);
+      wheel1Imgs.forEach((img) => {
+        img.classList.remove('spinWheels');
+      });
+
+      wheel2Imgs.forEach((img) => {
+        img.classList.remove('spinWheels');
+      });
+
+      wheel2Imgs.forEach((img) => {
+        img.classList.remove('spinWheels');
+      });
+
+
+      setTimeout(() => {
+        this.blur(wheel1);
+        wheel1Imgs.forEach((img) => {
+          img.classList.add('spinWheels');
+        });
+      }, 200);
+
+      setTimeout(() => {
+        this.blur(wheel2);
+        wheel2Imgs.forEach((img) => {
+          img.classList.add('spinWheels');
+        });
+      }, 700);
+
+      setTimeout(() => {
+        this.blur(wheel3);
+        wheel3Imgs.forEach((img) => {
+          img.classList.add('spinWheels');
+        });
+      }, 1200);
+
+      if (spinning === false) {
+        this.blink(creditInput);
+        this.blink(slotZeros);
+        this.setState({
+          spinning: 3,
+          credits: credits - 1,
+        });
+        tempCredits -= 1;
+        // Update the credits display
+        if (tempCredits.toString().length === 1) {
+          this.setState({
+            zeros: '00000000000',
+          });
+        }
+        if (tempCredits.toString().length === 2) {
+          this.setState({
+            zeros: '0000000000',
+          });
+        }
+        if (tempCredits.toString().length === 3) {
+          this.setState({
+            zeros: '000000000',
+          });
+        }
+        if (tempCredits.toString().length === 4) {
+          this.setState({
+            zeros: '00000000',
+          });
+        }
+        // Get ramdom number from 0 to 4
+        spin[0] = parseInt(Math.random() * 5, 10);
+        spin[1] = parseInt(Math.random() * 5, 10);
+        spin[2] = parseInt(Math.random() * 5, 10);
+        this.setState({
+          triggerDisabled: true,
+        });
+        // Disable Slot Machine trigger while the wheels are spinning
+        slotTrigger.classList.add('slotTriggerDisabled');
+        // Stop spinning wheels
+        setTimeout(() => {
+          this.stopSpin(1);
+          wheel1Imgs.forEach((img) => {
+            img.classList.remove('spinWheels');
+          });
+        }, 2000);
+
+        setTimeout(() => {
+          this.stopSpin(2);
+          wheel2Imgs.forEach((img) => {
+            img.classList.remove('spinWheels');
+          });
+        }, 2500);
+
+        setTimeout(() => {
+          this.stopSpin(3);
+          wheel3Imgs.forEach((img) => {
+            img.classList.remove('spinWheels');
+          });
+        }, 3000);
+
+        setTimeout(() => {
+          this.stopSpin(4);
+        }, 3500);
+      }
+    }
+    return false;
+  }
+
+  // endSlot() {
+  //   const { spinning } = this.state;
+  //   this.setState({
+
+  //   });
+  // }
+
+  startSlot() {
+    this.setState({
+      spinning: false,
     });
+    const {
+      slotTrigger,
+    } = this.refs;
+    slotTrigger.classList.remove('slotTriggerDisabled');
+    return false;
+  }
+
+  async endGame(game) {
+    const response = await fetch(
+      'http://localhost:5000/games/play',
+      {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(game),
+      },
+    );
+    const data = await response.json();
+    return data;
+  }
+
+  ShowPaytable() {
+    const {
+      showPayTable,
+    } = this.state;
+    if (showPayTable) {
+      this.setState({
+        showPayTable: false,
+      });
+    } else {
+      this.setState({
+        showPayTable: true,
+      });
+    }
+  }
+
+  ShowCombinationSelector() {
+    const {
+      showCombinationSelector,
+    } = this.state;
+    if (showCombinationSelector) {
+      this.setState({
+        showCombinationSelector: false,
+      });
+    } else {
+      this.setState({
+        showCombinationSelector: true,
+      });
+    }
   }
 
   addCredit(incrementCredits) {
@@ -757,7 +1072,6 @@ export default class Machine extends Component {
     this.setState({
       credits: credits + incrementCredits,
     });
-    console.log('slotCredit:', slotCredit);
     this.blink(slotCredit);
   }
 
@@ -848,22 +1162,26 @@ export default class Machine extends Component {
   render() {
     const {
       credits,
-      spin,
+      // spin,
       spinningWheel1Styled,
       spinningWheel2Styled,
       spinningWheel3Styled,
-      WinningLine,
+      // WinningLine,
       debugMode,
       zeros,
       balance,
       triggerDisabled,
       showPayTable,
+      showCombinationSelector,
+      paytableRow,
     } = this.state;
     let spinningWheel1;
     let spinningWheel2;
     let spinningWheel3;
     let disabledInput;
     let paytable;
+    let showCombSelector;
+    let combSelector;
 
     if (debugMode) {
       disabledInput = (
@@ -879,6 +1197,15 @@ export default class Machine extends Component {
           />
         </>
       );
+      showCombSelector = (
+        <>
+          <ShowCombinationSelectorButton
+            onClick={this.ShowCombinationSelector}
+          >
+            COMBINATION SELECTOR
+          </ShowCombinationSelectorButton>
+        </>
+      );
     } else {
       disabledInput = (
         <>
@@ -889,6 +1216,25 @@ export default class Machine extends Component {
             ref="creditInput"
             disabled
           />
+        </>
+      );
+      showCombSelector = (
+        <>
+        </>
+      );
+    }
+
+    if (showCombinationSelector) {
+      combSelector = (
+        <>
+          <CombinationSelector
+            ShowCombSelector={this.ShowCombinationSelector}
+          />
+        </>
+      );
+    } else {
+      combSelector = (
+        <>
         </>
       );
     }
@@ -1063,6 +1409,16 @@ export default class Machine extends Component {
         <>
           <PayTable
             ShowPaytable={this.ShowPaytable}
+            CherryTop={paytableRow.cherryTop}
+            CherryCenter={paytableRow.cherryCenter}
+            CherryBottom={paytableRow.cherryBottom}
+            Sevens={paytableRow.sevens}
+            SevenCherry={paytableRow.sevenCherry}
+            CherrySeven={paytableRow.cherrySeven}
+            Bars3={paytableRow.bars3}
+            Bars2={paytableRow.bars2}
+            Bars={paytableRow.bars}
+            BarsAny={paytableRow.barsAny}
           />
         </>
       );
@@ -1131,6 +1487,8 @@ export default class Machine extends Component {
           onMouseDown={this.ShowPaytable}
         />
         {paytable}
+        {showCombSelector}
+        {combSelector}
       </>
     );
   }

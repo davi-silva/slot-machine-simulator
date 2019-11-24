@@ -257,3 +257,21 @@ body::-webkit-scrollbar-thumb:hover {
 .CHERRY {
   transform: translateY(-270px)!important;
 }
+
+.PaytableWinningLine {
+  background: #fffc76;
+}
+
+@keyframes selected {
+  0% {
+    transform: scale(1, 1) translateY(40px);
+
+  }
+  100% {
+    transform: scale(0.7, 0.7) translateY(58px);
+  }
+}
+
+.ChosenCombination {
+  animation: selected .3s ease-in-out forwards;
+}

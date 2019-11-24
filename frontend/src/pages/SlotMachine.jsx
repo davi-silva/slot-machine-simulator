@@ -30,7 +30,6 @@ export default class SlotMachine extends Component {
     this.setState({
       showModal: false,
     });
-    console.log('hidePlayModal');
   }
 
   render() {

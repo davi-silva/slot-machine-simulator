@@ -19,3 +19,30 @@ export const rotate = keyframes`
     transform: rotate(360deg);
 	}
 `;
+
+export const blinkPayTable = keyframes`
+  0% {
+    background: #fff;
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.5);
+  }
+	20% {
+    background: #fff453;
+    box-shadow: inset 0px 0px 5px rgba(255, 156, 0, 0.5);
+	}
+  40% {
+    background: #fff;
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.5);
+  }
+  60% {
+    background: #fff453;
+    box-shadow: inset 0px 0px 5px rgba(255, 156, 0, 0.5);
+	}
+  80% {
+    background: #fff;
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.5);
+  }
+  100% {
+    background: #fff453;
+    box-shadow: inset 0px 0px 5px rgba(255, 156, 0, 0.5);
+	}
+`;
