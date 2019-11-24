@@ -9,7 +9,7 @@ import NavigationBar from './components/UI/navbar/NavigationBar';
 
 import SlotMachine from './pages/SlotMachine';
 import About from './pages/About';
-import LeaderBoard from './pages/LeaderBoard';
+import LeaderBoard from './pages/PastMatches';
 
 function App() {
   return (

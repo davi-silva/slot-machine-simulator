@@ -5,7 +5,7 @@ const GameSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  player: {
+  playerInfo: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Player',
     required: true,
@@ -15,7 +15,7 @@ const GameSchema = new mongoose.Schema({
     required: true,
     default: [],
   },
-  totalPoints: {
+  totalBalance: {
     type: Number,
     required: true,
   },

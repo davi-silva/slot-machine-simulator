@@ -13,7 +13,7 @@ export default class SlotMachine extends Component {
     super(props);
     this.state = {
       playerInfo: null,
-      showModal: false,
+      showModal: true,
     };
     this.hidePlayModal = this.hidePlayModal.bind(this);
     this.setPlayerInfo = this.setPlayerInfo.bind(this);
@@ -39,7 +39,10 @@ export default class SlotMachine extends Component {
   }
 
   render() {
-    const { showModal } = this.state;
+    const {
+      showModal,
+      playerInfo,
+    } = this.state;
     let modal;
     let slotMachine;
     if (showModal) {
@@ -59,7 +62,7 @@ export default class SlotMachine extends Component {
       );
       slotMachine = (
         <>
-          <Machine />
+          <Machine playerInfo={playerInfo} />
           {/* <PayTable
             style={{
               display: 'none!important',

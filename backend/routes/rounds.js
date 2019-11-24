@@ -38,12 +38,47 @@ app.get('/', (req, res) => {
   console.log('Getting all rounds...');
 });
 
+// Get all round by Player
+app.get('/all/player/:player', (req, res) => {
+  const { player } = req.params;
+  const roundsList = [];
+  Round.find({
+    player: [
+      player,
+    ],
+  })
+    .populate('player')
+    .then((rounds) => {
+      console.log('rounds.length:', rounds.length);
+      rounds.map((round) => {
+        console.log('round.player.name:', round.player.name);
+        // if (round.player.name === player) {
+        roundsList.push({
+          id: round.id,
+          player: round.player,
+          topCombination: round.topCombination,
+          mainCombination: round.mainCombination,
+          bottomCombination: round.bottomCombination,
+          playedOn: round.playedOn,
+        });
+        // }
+      });
+      res.status(302).send(roundsList);
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
 // Get Podcast by id
 app.get('/:id', (req, res) => {
   const { id } = req.params;
   Round.findOne({
     id,
   })
+    .populate('player')
     .then((round) => {
       res.status(302).send({
         id: round.id,
@@ -64,15 +99,14 @@ app.get('/:id', (req, res) => {
 app.post('/play', (req, res) => {
   const {
     player,
-    mainCombination,
     topCombination,
+    mainCombination,
     bottomCombination,
-    won,
   } = req.body;
   const errors = [];
   if (!player
-    || mainCombination.lenth === 0
     || topCombination.length === 0
+    || mainCombination.lenth === 0
     || bottomCombination.length === 0) {
     errors.push({
       errorMsg: 'Please enter all fields.',
@@ -92,10 +126,9 @@ app.post('/play', (req, res) => {
     const newRound = new Round({
       id,
       player,
-      mainCombination,
       topCombination,
+      mainCombination,
       bottomCombination,
-      won,
       playedOn,
     });
     newRound
@@ -104,10 +137,9 @@ app.post('/play', (req, res) => {
         res.status(201).send({
           id,
           player,
-          mainCombination,
           topCombination,
+          mainCombination,
           bottomCombination,
-          won,
           playedOn,
         });
       })

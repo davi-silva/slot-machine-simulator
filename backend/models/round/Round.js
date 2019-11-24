@@ -10,12 +10,12 @@ const RoundSchema = new mongoose.Schema({
     ref: 'Player',
     required: true,
   },
-  mainCombination: {
+  topCombination: {
     type: Array,
     required: true,
     default: [],
   },
-  topCombination: {
+  mainCombination: {
     type: Array,
     required: true,
     default: [],
@@ -24,10 +24,6 @@ const RoundSchema = new mongoose.Schema({
     type: Array,
     required: true,
     default: [],
-  },
-  won: {
-    type: Boolean,
-    required: true,
   },
   playedOn: {
     type: Date,

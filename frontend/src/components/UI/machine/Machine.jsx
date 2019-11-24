@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable class-methods-use-this */
@@ -55,45 +57,11 @@ export default class Machine extends Component {
       startGame: false,
       debugMode: false,
       zeros: '0000000000',
-      slotsTypes: {
-        bar3: [0, 0, 0],
-        bar1: [1, 1, 1],
-        bar2: [2, 2, 2],
-        seven: [3, 3, 3],
-        cherry: [4, 4, 4],
-      },
       slots: [
         ['bar3', 'bar', 'bar2', 'seven', 'cherry'],
         ['bar3', 'bar', 'bar2', 'seven', 'cherry'],
         ['bar3', 'bar', 'bar2', 'seven', 'cherry'],
       ],
-      winningCombinations: {
-        top: ['cherry', 'cherry', 'cherry', 2000],
-        center: ['cherry', 'cherry', 'cherry', 1000],
-        bottom: ['cherry', 'cherry', 'cherry', 4000],
-        anyLine: {
-          sevenLine: {
-            top: ['seven', 'seven', 'seven', 150],
-            center: ['seven', 'seven', 'seven', 150],
-            bottom: ['seven', 'seven', 'seven', 150],
-          },
-          Bar3Line: {
-            top: ['bar3', 'bar3', 'bar3', 50],
-            center: ['bar3', 'bar3', 'bar3', 50],
-            bottom: ['bar3', 'bar3', 'bar3', 50],
-          },
-          Bar2Line: {
-            top: ['bar2', 'bar2', 'bar2', 20],
-            center: ['bar2', 'bar2', 'bar2', 20],
-            bottom: ['bar2', 'bar2', 'bar2', 20],
-          },
-          BarLine: {
-            top: ['bar', 'bar', 'bar', 10],
-            center: ['bar', 'bar', 'bar', 10],
-            bottom: ['bar', 'bar', 'bar', 10],
-          },
-        },
-      },
       spinning: 3,
       spin: [0, 0, 0],
       credits: 15,
@@ -128,11 +96,85 @@ export default class Machine extends Component {
     this.slotTriggerUp = this.slotTriggerUp.bind(this);
     this.onCreditsChange = this.onCreditsChange.bind(this);
     this.onSetDebugMode = this.onSetDebugMode.bind(this);
+    this.submitRound = this.submitRound.bind(this);
+    this.getRoundsByPlayer = this.getRoundsByPlayer.bind(this);
+    this.submitFullGameResult = this.submitFullGameResult.bind(this);
+    this.endGame = this.endGame.bind(this);
   }
 
 
   async componentDidMount() {
     this.startSlot();
+  }
+
+  onSetDebugMode(e) {
+    this.setState({
+      debugMode: e.target.checked,
+    });
+  }
+
+  onCreditsChange(e) {
+    if (e.target.value <= 5000) {
+      if (e.target.value.toString().length === 0) {
+        this.setState({
+          zeros: '000000000000',
+        });
+      } else if (e.target.value.toString().length === 1) {
+        this.setState({
+          zeros: '00000000000',
+        });
+      } else if (e.target.value.toString().length === 2) {
+        this.setState({
+          zeros: '0000000000',
+        });
+      } else if (e.target.value.toString().length === 3) {
+        this.setState({
+          zeros: '000000000',
+        });
+      } else if (e.target.value.toString().length === 4) {
+        this.setState({
+          zeros: '00000000',
+        });
+      }
+      this.setState({
+        credits: e.target.value,
+      });
+    }
+  }
+
+  async getRoundsByPlayer(player) {
+    const response = await fetch(
+      `http://localhost:5000/rounds/all/player/${player}`,
+      {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const data = await response.json();
+    return data;
+  }
+
+  async endGame(game) {
+    const response = await fetch(
+      'http://localhost:5000/games/play',
+      {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(game),
+      },
+    );
+    const data = await response.json();
+    return data;
   }
 
   startSlot() {
@@ -141,9 +183,6 @@ export default class Machine extends Component {
     });
     const {
       slotTrigger,
-      wheel1,
-      wheel2,
-      wheel3,
     } = this.refs;
     slotTrigger.classList.remove('slotTriggerDisabled');
     return false;
@@ -156,29 +195,21 @@ export default class Machine extends Component {
     });
   }
 
-  spin() {
+  async spin() {
     const {
       wheel1,
       wheel2,
       wheel3,
       slotTrigger,
       creditInput,
-      arm,
-      knob,
-      ArmShadow,
       slotZeros,
     } = this.refs;
     const {
       spin,
       spinning,
-      zeros,
       credits,
       triggerDisabled,
     } = this.state;
-
-    if (credits <= 0) {
-      return false;
-    }
 
     if (!triggerDisabled) {
       const wheelChild1 = wheel1.childNodes;
@@ -205,7 +236,6 @@ export default class Machine extends Component {
         wheelChild3[4],
         wheelChild3[5],
       ];
-      console.log('creditInput:', creditInput);
 
       let tempCredits = credits;
       // this.blink(slotCredit);
@@ -244,7 +274,6 @@ export default class Machine extends Component {
       }, 1200);
 
       if (spinning === false) {
-        console.log('spinning: ', spinning);
         this.blink(creditInput);
         this.blink(slotZeros);
         this.setState({
@@ -252,10 +281,24 @@ export default class Machine extends Component {
           credits: credits - 1,
         });
         tempCredits -= 1;
-        console.log('credits.toString().length:', credits.toString().length);
         if (tempCredits.toString().length === 1) {
           this.setState({
             zeros: '00000000000',
+          });
+        }
+        if (tempCredits.toString().length === 2) {
+          this.setState({
+            zeros: '0000000000',
+          });
+        }
+        if (tempCredits.toString().length === 3) {
+          this.setState({
+            zeros: '000000000',
+          });
+        }
+        if (tempCredits.toString().length === 4) {
+          this.setState({
+            zeros: '00000000',
           });
         }
         spin[0] = parseInt(Math.random() * 5, 10);
@@ -302,21 +345,18 @@ export default class Machine extends Component {
     } = this.refs;
     const { spinning } = this.state;
     if (wheelNumber === 1) {
-      console.log('Stop Wheel 1');
       this.unblur(wheel1);
       this.setState({
         spinning: spinning - 1,
       });
     }
     if (wheelNumber === 2) {
-      console.log('Stop Wheel 2');
       this.unblur(wheel2);
       this.setState({
         spinning: spinning - 1,
       });
     }
     if (wheelNumber === 3) {
-      console.log('Stop Wheel 3');
       this.unblur(wheel3);
       this.setState({
         spinning: spinning - 1,
@@ -331,15 +371,17 @@ export default class Machine extends Component {
     }
   }
 
-  endSpin() {
+  async endSpin() {
     const {
-      slotsTypes,
       slots,
       spin,
       credits,
       balance,
-      winningCombinations,
     } = this.state;
+
+    const {
+      playerInfo,
+    } = this.props;
 
     const {
       slotTrigger,
@@ -358,16 +400,12 @@ export default class Machine extends Component {
       }
     }
 
-    console.log('playerCombTop:', playerCombTop);
-
     const spinCenter = spin;
     const playerCombCenter = [
       slots[0][spinCenter[0]],
       slots[1][spinCenter[1]],
       slots[2][spinCenter[2]],
     ];
-
-    console.log('playerCombCenter:', playerCombCenter);
 
     const playerCombBottom = [];
     const spinBottom = spin;
@@ -379,8 +417,6 @@ export default class Machine extends Component {
         playerCombBottom.push(slots[i][spinBottom[i] + 1]);
       }
     }
-
-    console.log('playerCombBottom:', playerCombBottom);
 
     let bar3AmountTop = 0;
     let barAmountTop = 0;
@@ -555,6 +591,22 @@ export default class Machine extends Component {
       slotTrigger.classList.remove('slotTriggerDisabled');
       slotCredit.classList.remove('blinkAnimation');
     }, 500);
+    const round = {
+      player: playerInfo._id,
+      name: playerInfo.name,
+      topCombination: playerCombTop,
+      mainCombination: playerCombCenter,
+      bottomCombination: playerCombBottom,
+    };
+    if (credits <= 0 || credits === '0') {
+      const allRoundsPlayed = await this.getRoundsByPlayer(playerInfo._id);
+      const game = {
+        playerInfo,
+        rounds: allRoundsPlayed,
+        totalBalance: balance,
+      };
+      this.endGame(game);
+    }
   }
 
   addCredit(incrementCredits) {
@@ -591,14 +643,17 @@ export default class Machine extends Component {
     const {
       slotTrigger,
       arm,
-      credits,
     } = this.refs;
-    slotTrigger.classList.remove('slotTriggerDown');
-    slotTrigger.classList.add('slotTriggerDown');
-    arm.classList.remove('releaseArmAnimation');
-    arm.classList.remove('pushArmAnimation');
-    // arm.classList.add('pushArmAnimation');
-    this.spin();
+    const {
+      credits,
+    } = this.state;
+    if (!(credits <= 0 || credits === '0')) {
+      slotTrigger.classList.remove('slotTriggerDown');
+      slotTrigger.classList.add('slotTriggerDown');
+      arm.classList.remove('releaseArmAnimation');
+      arm.classList.remove('pushArmAnimation');
+      this.spin();
+    }
   }
 
   slotTriggerUp() {
@@ -612,39 +667,40 @@ export default class Machine extends Component {
     arm.classList.add('releaseArmAnimation');
   }
 
-  onCreditsChange(e) {
-    if (e.target.value <= 5000) {
-      if (e.target.value.toString().length === 0) {
-        this.setState({
-          zeros: '000000000000',
-        });
-      } else if (e.target.value.toString().length === 1) {
-        this.setState({
-          zeros: '00000000000',
-        });
-      } else if (e.target.value.toString().length === 2) {
-        this.setState({
-          zeros: '0000000000',
-        });
-      } else if (e.target.value.toString().length === 3) {
-        this.setState({
-          zeros: '000000000',
-        });
-      } else if (e.target.value.toString().length === 4) {
-        this.setState({
-          zeros: '00000000',
-        });
-      }
-      this.setState({
-        credits: e.target.value,
-      });
-    }
+  async submitRound(round) {
+    const response = await fetch(
+      'http://localhost:5000/rounds/play',
+      {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(round),
+      },
+    );
+    const data = await response.json();
+    return data;
   }
 
-  onSetDebugMode(e) {
-    this.setState({
-      debugMode: e.target.checked,
-    });
+  async submitFullGameResult(game) {
+    const response = await fetch(
+      'http://localhost:5000/rounds/play',
+      {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(game),
+      },
+    );
+    const data = await response.json();
+    return data;
   }
 
 
@@ -913,6 +969,12 @@ export default class Machine extends Component {
         <input
           type="checkbox"
           onChange={this.onSetDebugMode}
+          style={{
+            top: '27.4%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            position: 'fixed',
+          }}
         />
       </>
     );

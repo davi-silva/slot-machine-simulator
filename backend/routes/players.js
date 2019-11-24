@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
     .then((rounds) => {
       rounds.map((player) => {
         playerList.push({
+          _id: player._id,
           id: player.id,
           name: player.name,
           mainCombination: player.mainCombination,
@@ -95,16 +96,17 @@ app.post('/create', (req, res) => {
       id,
       name,
       createdOn,
-      lastGameOn
+      lastGameOn,
     });
     newPlayer
       .save()
-      .then(() => {
+      .then((player) => {
         res.status(201).send({
+          _id: player._id,
           id,
           name,
           createdOn,
-          lastGameOn
+          lastGameOn,
         });
       })
       .catch((err) => {
