@@ -46,22 +46,22 @@ export default class Player extends Component {
     }
   }
 
+
   async onChangePlayerName(e) {
     this.setStateAsync({
       player: e.target.value,
     });
   }
 
-  async resetPlayerName() {
-    this.setStateAsync({
-      player: '',
-    });
-  }
-
-
   setStateAsync(state) {
     return new Promise((resolve) => {
       this.setState(state, resolve);
+    });
+  }
+
+  async resetPlayerName() {
+    this.setStateAsync({
+      player: '',
     });
   }
 
@@ -133,6 +133,7 @@ export default class Player extends Component {
                       onChange={this.onChangePlayerName}
                       value={player}
                       required
+                      autoFocus
                     />
                     {notValidPlayerWarning}
                     <Button>

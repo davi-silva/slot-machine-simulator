@@ -226,6 +226,47 @@ export const WheelImage = styled.img`
   transform: translateY(-28px);
 `;
 
+export const WheelImageBAR3 = styled.img`
+  height: 60px;
+  max-width: 87px;
+  display: table;
+  margin: 0 auto;
+  transform: translateY(-28px);
+`;
+
+export const WheelImageBAR1 = styled.img`
+  height: 60px;
+  max-width: 87px;
+  display: table;
+  margin: 0 auto;
+  transform: translateY(-86px);
+`;
+
+export const WheelImageBAR2 = styled.img`
+  height: 60px;
+  max-width: 87px;
+  display: table;
+  margin: 0 auto;
+  transform: translateY(-144px);
+`;
+
+export const WheelImageSeven = styled.img`
+  height: 60px;
+  max-width: 87px;
+  display: table;
+  margin: 0 auto;
+  transform: translateY(-205px);
+`;
+
+export const WheelImageCherry = styled.img`
+  height: 60px;
+  max-width: 87px;
+  display: table;
+  margin: 0 auto;
+  transform: translateY(-270px);
+`;
+
+
 export const SlotTrigger = styled.div`
   cursor: pointer;
   height: 85px;

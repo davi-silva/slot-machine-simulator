@@ -15,6 +15,7 @@ import Cherry from '../../../static/img/Cherry.png';
 
 import PayTable from '../paytable/PayTable';
 import CombinationSelector from '../combination-selection/CombinationSelector';
+import GameOver from '../game-over/GameOver.component';
 
 import {
   SlotMachine,
@@ -33,6 +34,11 @@ import {
   Wheel,
   WheelOverlay,
   WheelImage,
+  WheelImageBAR3,
+  WheelImageBAR1,
+  WheelImageBAR2,
+  WheelImageSeven,
+  WheelImageCherry,
   SlotTrigger,
   Arm,
   Knob,
@@ -64,6 +70,7 @@ export default class Machine extends Component {
         ['bar3', 'bar', 'bar2', 'seven', 'cherry'],
         ['bar3', 'bar', 'bar2', 'seven', 'cherry'],
       ],
+      isSpinnig: false,
       spinning: 3,
       spin: [0, 0, 0],
       fixedSpin: [0, 0, 0],
@@ -74,6 +81,7 @@ export default class Machine extends Component {
       showCombinationSelector: false,
       winningLine: [],
       triggerDisabled: false,
+      hasEnded: false,
       spinningWheel1Styled: {
         img: {
           transform: 'translateY(-50px)',
@@ -121,6 +129,7 @@ export default class Machine extends Component {
     this.ShowPaytable = this.ShowPaytable.bind(this);
     this.ShowCombinationSelector = this.ShowCombinationSelector.bind(this);
     this.chooseFixedSpin = this.chooseFixedSpin.bind(this);
+    this.RedirectToScoreboard = this.RedirectToScoreboard.bind(this);
   }
 
 
@@ -194,11 +203,9 @@ export default class Machine extends Component {
       balance,
       paytableRow,
     } = this.state;
-
     const {
       playerInfo,
     } = this.props;
-
     const {
       slotTrigger,
       slotCredit,
@@ -207,6 +214,7 @@ export default class Machine extends Component {
       wheel2,
       wheel3,
     } = this.refs;
+
     const wheelChild1 = wheel1.childNodes;
     const wheelChild2 = wheel2.childNodes;
     const wheelChild3 = wheel3.childNodes;
@@ -232,6 +240,9 @@ export default class Machine extends Component {
       wheelChild3[5],
     ];
 
+    let tempBalance = balance;
+
+    // Getting Top Combination
     const playerCombTop = [];
     const spinTop = spin;
     for (let i = 0; i < 3; i += 1) {
@@ -243,6 +254,7 @@ export default class Machine extends Component {
       }
     }
 
+    // Getting Center Combination
     const spinCenter = spin;
     const playerCombCenter = [
       slots[0][spinCenter[0]],
@@ -252,6 +264,7 @@ export default class Machine extends Component {
 
     console.log('playerCombCenter:', playerCombCenter);
 
+    // Getting Bottom Combination
     const playerCombBottom = [];
     const spinBottom = spin;
     for (let i = 0; i < 3; i += 1) {
@@ -263,6 +276,7 @@ export default class Machine extends Component {
       }
     }
 
+    // Counting each symbol on the Top line
     let bar3AmountTop = 0;
     let barAmountTop = 0;
     let bar2AmountTop = 0;
@@ -272,100 +286,103 @@ export default class Machine extends Component {
     playerCombTop.forEach((symbol) => {
       if (symbol === 'bar3') {
         bar3AmountTop += 1;
-        if (count === 0) {
-          wheel1Imgs.forEach((img) => {
-            img.classList.add('BAR3');
-          });
-        } else if (count === 1) {
-          wheel2Imgs.forEach((img) => {
-            img.classList.add('BAR3');
-          });
-        } else if (count === 2) {
-          wheel3Imgs.forEach((img) => {
-            img.classList.add('BAR3');
-          });
-        }
+        // if (count === 0) {
+        //   wheel1Imgs.forEach((img) => {
+        //     img.classList.add('BAR3');
+        //   });
+        // } else if (count === 1) {
+        //   wheel2Imgs.forEach((img) => {
+        //     img.classList.add('BAR3');
+        //   });
+        // } else if (count === 2) {
+        //   wheel3Imgs.forEach((img) => {
+        //     img.classList.add('BAR3');
+        //   });
+        // }
       }
       if (symbol === 'bar') {
         barAmountTop += 1;
-        if (count === 0) {
-          wheel1Imgs.forEach((img) => {
-            img.classList.add('BAR');
-          });
-        } else if (count === 1) {
-          wheel2Imgs.forEach((img) => {
-            img.classList.add('BAR');
-          });
-        } else if (count === 2) {
-          wheel3Imgs.forEach((img) => {
-            img.classList.add('BAR');
-          });
-        }
+        // if (count === 0) {
+        //   wheel1Imgs.forEach((img) => {
+        //     img.classList.add('BAR');
+        //   });
+        // } else if (count === 1) {
+        //   wheel2Imgs.forEach((img) => {
+        //     img.classList.add('BAR');
+        //   });
+        // } else if (count === 2) {
+        //   wheel3Imgs.forEach((img) => {
+        //     img.classList.add('BAR');
+        //   });
+        // }
       }
       if (symbol === 'bar2') {
         bar2AmountTop += 1;
-        if (count === 0) {
-          wheel1Imgs.forEach((img) => {
-            img.classList.add('BAR2');
-          });
-        } else if (count === 1) {
-          wheel2Imgs.forEach((img) => {
-            img.classList.add('BAR2');
-          });
-        } else if (count === 2) {
-          wheel3Imgs.forEach((img) => {
-            img.classList.add('BAR2');
-          });
-        }
+        // if (count === 0) {
+        //   wheel1Imgs.forEach((img) => {
+        //     img.classList.add('BAR2');
+        //   });
+        // } else if (count === 1) {
+        //   wheel2Imgs.forEach((img) => {
+        //     img.classList.add('BAR2');
+        //   });
+        // } else if (count === 2) {
+        //   wheel3Imgs.forEach((img) => {
+        //     img.classList.add('BAR2');
+        //   });
+        // }
       }
       if (symbol === 'seven') {
         sevensAmountTop += 1;
-        if (count === 0) {
-          wheel1Imgs.forEach((img) => {
-            img.classList.add('SEVEN');
-          });
-        } else if (count === 1) {
-          wheel2Imgs.forEach((img) => {
-            img.classList.add('SEVEN');
-          });
-        } else if (count === 2) {
-          wheel3Imgs.forEach((img) => {
-            img.classList.add('SEVEN');
-          });
-        }
+        // if (count === 0) {
+        //   wheel1Imgs.forEach((img) => {
+        //     img.classList.add('SEVEN');
+        //   });
+        // } else if (count === 1) {
+        //   wheel2Imgs.forEach((img) => {
+        //     img.classList.add('SEVEN');
+        //   });
+        // } else if (count === 2) {
+        //   wheel3Imgs.forEach((img) => {
+        //     img.classList.add('SEVEN');
+        //   });
+        // }
       }
       if (symbol === 'cherry') {
         cherriesAmountTop += 1;
-        if (count === 0) {
-          wheel1Imgs.forEach((img) => {
-            img.classList.add('CHERRY');
-          });
-        } else if (count === 1) {
-          wheel2Imgs.forEach((img) => {
-            img.classList.add('CHERRY');
-          });
-        } else if (count === 2) {
-          wheel3Imgs.forEach((img) => {
-            img.classList.add('CHERRY');
-          });
-        }
+        // if (count === 0) {
+        //   wheel1Imgs.forEach((img) => {
+        //     img.classList.add('CHERRY');
+        //   });
+        // } else if (count === 1) {
+        //   wheel2Imgs.forEach((img) => {
+        //     img.classList.add('CHERRY');
+        //   });
+        // } else if (count === 2) {
+        //   wheel3Imgs.forEach((img) => {
+        //     img.classList.add('CHERRY');
+        //   });
+        // }
       }
       count += 1;
     });
 
-
+    // Looking for any winning combination on the Top line
     if (sevensAmountTop === 2 && cherriesAmountTop === 1) {
+      tempBalance += 75;
       this.blink(balanceRef);
       this.setState({
-        balance: balance + 75,
+        balance: tempBalance,
       });
     } else if (sevensAmountTop === 1 && cherriesAmountTop === 2) {
+      tempBalance += 75;
       this.blink(balanceRef);
       this.setState({
-        balance: balance + 75,
+        balance: tempBalance,
       });
     }
 
+    // Counting each symbol on the Center line
     let bar3AmountCenter = 0;
     let barAmountCenter = 0;
     let bar2AmountCenter = 0;
@@ -389,19 +406,22 @@ export default class Machine extends Component {
       }
     });
 
-
+    // Looking for any winning combination on the Center line
     if (sevensAmountCenter === 2 && cherriesAmountCenter === 1) {
+      tempBalance += 75;
       this.blink(balanceRef);
       this.setState({
-        balance: balance + 75,
+        balance: tempBalance,
       });
     } else if (sevensAmountCenter === 1 && cherriesAmountCenter === 2) {
+      tempBalance += 75;
       this.blink(balanceRef);
       this.setState({
-        balance: balance + 75,
+        balance: tempBalance,
       });
     }
 
+    // Counting each symbol on the Bottom line
     let bar3AmountBottom = 0;
     let barAmountBottom = 0;
     let bar2AmountBottom = 0;
@@ -426,9 +446,10 @@ export default class Machine extends Component {
     });
 
     if (cherriesAmountTop === 3) {
+      tempBalance += 2000;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 2000,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: true,
           cherryCenter: paytableRow.cherryCenter,
@@ -443,10 +464,13 @@ export default class Machine extends Component {
         },
       });
     }
+    console.log('cherriesAmountCenter:', cherriesAmountCenter);
     if (cherriesAmountCenter === 3) {
+      console.log('There are 3 cherries in the center line');
+      tempBalance += 1000;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 1000,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: true,
@@ -462,9 +486,10 @@ export default class Machine extends Component {
       });
     }
     if (cherriesAmountBottom === 3) {
+      tempBalance += 4000;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 4000,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -480,9 +505,10 @@ export default class Machine extends Component {
       });
     }
     if (sevensAmountTop === 3) {
+      tempBalance += 150;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 150,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -498,9 +524,10 @@ export default class Machine extends Component {
       });
     }
     if (sevensAmountCenter === 3) {
+      tempBalance += 150;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 150,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -516,9 +543,10 @@ export default class Machine extends Component {
       });
     }
     if (sevensAmountBottom === 3) {
+      tempBalance += 150;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 150,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -535,9 +563,10 @@ export default class Machine extends Component {
     }
 
     if (sevensAmountBottom === 2 && cherriesAmountBottom === 1) {
+      tempBalance += 75;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 75,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -553,9 +582,10 @@ export default class Machine extends Component {
       });
     }
     if (sevensAmountBottom === 1 && cherriesAmountBottom === 2) {
+      tempBalance += 75;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 75,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -571,9 +601,10 @@ export default class Machine extends Component {
       });
     }
     if (bar3AmountTop === 3) {
+      tempBalance += 50;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 50,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -590,9 +621,10 @@ export default class Machine extends Component {
     }
 
     if (bar3AmountCenter === 3) {
+      tempBalance += 50;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 50,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -609,9 +641,10 @@ export default class Machine extends Component {
     }
 
     if (bar3AmountBottom === 3) {
+      tempBalance += 50;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 50,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -628,9 +661,10 @@ export default class Machine extends Component {
     }
 
     if (bar2AmountTop === 3) {
+      tempBalance += 20;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 20,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -647,9 +681,10 @@ export default class Machine extends Component {
     }
 
     if (bar2AmountCenter === 3) {
+      tempBalance += 20;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 20,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -666,9 +701,10 @@ export default class Machine extends Component {
     }
 
     if (bar2AmountBottom === 3) {
+      tempBalance += 20;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 20,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -685,9 +721,10 @@ export default class Machine extends Component {
     }
 
     if (barAmountTop === 3) {
+      tempBalance += 10;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 10,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -704,9 +741,10 @@ export default class Machine extends Component {
     }
 
     if (barAmountCenter === 3) {
+      tempBalance += 10;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 10,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -723,9 +761,10 @@ export default class Machine extends Component {
     }
 
     if (barAmountBottom === 3) {
+      tempBalance += 10;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 10,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -742,9 +781,10 @@ export default class Machine extends Component {
     }
 
     if (barAmountTop > 0 && barAmountTop < 3) {
+      tempBalance += 5;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 5,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -761,9 +801,10 @@ export default class Machine extends Component {
     }
 
     if (barAmountCenter > 0 && barAmountCenter < 3) {
+      tempBalance += 5;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 5,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -780,9 +821,10 @@ export default class Machine extends Component {
     }
 
     if (barAmountBottom > 0 && barAmountBottom < 3) {
+      tempBalance += 5;
       this.blink(balanceRef);
       this.setStateAsync({
-        balance: balance + 5,
+        balance: tempBalance,
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -801,6 +843,7 @@ export default class Machine extends Component {
     setTimeout(() => {
       this.setStateAsync({
         triggerDisabled: false,
+        isSpinnig: false,
       });
       slotTrigger.classList.remove('slotTriggerDisabled');
       slotCredit.classList.remove('blinkAnimation');
@@ -821,7 +864,19 @@ export default class Machine extends Component {
         totalBalance: balance,
       };
       this.endGame(game);
+      this.setState({
+        hasEnded: true,
+      });
+      setTimeout(() => {
+        this.RedirectToScoreboard();
+      }, 4000);
     }
+  }
+
+  RedirectToScoreboard() {
+    const { RedirectTo } = this.props;
+    const Redirect = RedirectTo;
+    Redirect('scoreboard');
   }
 
   stopSpin(wheelNumber) {
@@ -987,6 +1042,7 @@ export default class Machine extends Component {
         }
         this.setState({
           triggerDisabled: true,
+          isSpinnig: true,
         });
         // Disable Slot Machine trigger while the wheels are spinning
         slotTrigger.classList.add('slotTriggerDisabled');
@@ -1348,7 +1404,8 @@ export default class Machine extends Component {
   render() {
     const {
       credits,
-      // spin,
+      spin,
+      isSpinnig,
       spinningWheel1Styled,
       spinningWheel2Styled,
       spinningWheel3Styled,
@@ -1360,7 +1417,11 @@ export default class Machine extends Component {
       showPayTable,
       showCombinationSelector,
       paytableRow,
+      hasEnded,
     } = this.state;
+    const {
+      playerInfo,
+    } = this.props;
     let spinningWheel1;
     let spinningWheel2;
     let spinningWheel3;
@@ -1368,6 +1429,23 @@ export default class Machine extends Component {
     let paytable;
     let showCombSelector;
     let combSelector;
+    let gameOverModal;
+
+    if (hasEnded) {
+      gameOverModal = (
+        <>
+          <GameOver
+            PlayerName={playerInfo.name}
+            PlayerBalance={balance}
+          />
+        </>
+      );
+    } else {
+      gameOverModal = (
+        <>
+        </>
+      );
+    }
 
     if (debugMode) {
       disabledInput = (
@@ -1426,7 +1504,7 @@ export default class Machine extends Component {
       );
     }
 
-    if (spinningWheel1Styled === null) {
+    if (isSpinnig) {
       spinningWheel1 = (
         <>
           <>
@@ -1446,24 +1524,99 @@ export default class Machine extends Component {
           </>
         </>
       );
-    } else if (spinningWheel1Styled !== null) {
-      spinningWheel1 = (
-        <>
-          <Wheel
-            ref="wheel1"
-            id="wheel1"
-          >
-            <WheelOverlay />
-            <WheelImage src={Cherry} className="slotSpinAnimation" />
-            <WheelImage src={BAR3} className="slotSpinAnimation" />
-            <WheelImage src={BAR} className="slotSpinAnimation" />
-            <WheelImage src={BAR2} className="slotSpinAnimation" />
-            <WheelImage src={Seven} className="slotSpinAnimation" />
-            <WheelImage src={Cherry} className="slotSpinAnimation" />
-            <WheelImage src={BAR3} className="slotSpinAnimation" />
-          </Wheel>
-        </>
-      );
+    } else if (!isSpinnig) {
+      console.log('Giro Maroto');
+      if (spin[0] === 0) {
+        spinningWheel1 = (
+          <>
+            <Wheel
+              ref="wheel1"
+              id="wheel1"
+            >
+              <WheelOverlay />
+              <WheelImageBAR3 src={Cherry} className="slotSpinAnimation" />
+              <WheelImageBAR3 src={BAR3} className="slotSpinAnimation" />
+              <WheelImageBAR3 src={BAR} className="slotSpinAnimation" />
+              <WheelImageBAR3 src={BAR2} className="slotSpinAnimation" />
+              <WheelImageBAR3 src={Seven} className="slotSpinAnimation" />
+              <WheelImageBAR3 src={Cherry} className="slotSpinAnimation" />
+              <WheelImageBAR3 src={BAR3} className="slotSpinAnimation" />
+            </Wheel>
+          </>
+        );
+      } else if (spin[0] === 1) {
+        spinningWheel1 = (
+          <>
+            <Wheel
+              ref="wheel1"
+              id="wheel1"
+            >
+              <WheelOverlay />
+              <WheelImageBAR1 src={Cherry} className="slotSpinAnimation" />
+              <WheelImageBAR1 src={BAR3} className="slotSpinAnimation" />
+              <WheelImageBAR1 src={BAR} className="slotSpinAnimation" />
+              <WheelImageBAR1 src={BAR2} className="slotSpinAnimation" />
+              <WheelImageBAR1 src={Seven} className="slotSpinAnimation" />
+              <WheelImageBAR1 src={Cherry} className="slotSpinAnimation" />
+              <WheelImageBAR1 src={BAR3} className="slotSpinAnimation" />
+            </Wheel>
+          </>
+        );
+      } else if (spin[0] === 2) {
+        spinningWheel1 = (
+          <>
+            <Wheel
+              ref="wheel1"
+              id="wheel1"
+            >
+              <WheelOverlay />
+              <WheelImageBAR2 src={Cherry} className="slotSpinAnimation" />
+              <WheelImageBAR2 src={BAR3} className="slotSpinAnimation" />
+              <WheelImageBAR2 src={BAR} className="slotSpinAnimation" />
+              <WheelImageBAR2 src={BAR2} className="slotSpinAnimation" />
+              <WheelImageBAR2 src={Seven} className="slotSpinAnimation" />
+              <WheelImageBAR2 src={Cherry} className="slotSpinAnimation" />
+              <WheelImageBAR2 src={BAR3} className="slotSpinAnimation" />
+            </Wheel>
+          </>
+        );
+      } else if (spin[0] === 3) {
+        spinningWheel1 = (
+          <>
+            <Wheel
+              ref="wheel1"
+              id="wheel1"
+            >
+              <WheelOverlay />
+              <WheelImageSeven src={Cherry} className="slotSpinAnimation" />
+              <WheelImageSeven src={BAR3} className="slotSpinAnimation" />
+              <WheelImageSeven src={BAR} className="slotSpinAnimation" />
+              <WheelImageSeven src={BAR2} className="slotSpinAnimation" />
+              <WheelImageSeven src={Seven} className="slotSpinAnimation" />
+              <WheelImageSeven src={Cherry} className="slotSpinAnimation" />
+              <WheelImageSeven src={BAR3} className="slotSpinAnimation" />
+            </Wheel>
+          </>
+        );
+      } else if (spin[0] === 4) {
+        spinningWheel1 = (
+          <>
+            <Wheel
+              ref="wheel1"
+              id="wheel1"
+            >
+              <WheelOverlay />
+              <WheelImageCherry src={Cherry} className="slotSpinAnimation" />
+              <WheelImageCherry src={BAR3} className="slotSpinAnimation" />
+              <WheelImageCherry src={BAR} className="slotSpinAnimation" />
+              <WheelImageCherry src={BAR2} className="slotSpinAnimation" />
+              <WheelImageCherry src={Seven} className="slotSpinAnimation" />
+              <WheelImageCherry src={Cherry} className="slotSpinAnimation" />
+              <WheelImageCherry src={BAR3} className="slotSpinAnimation" />
+            </Wheel>
+          </>
+        );
+      }
     }
 
     if (spinningWheel2Styled === null) {
@@ -1676,6 +1829,7 @@ export default class Machine extends Component {
         />
         {paytable}
         {combSelector}
+        {gameOverModal}
       </>
     );
   }

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 
 import PlayerModal from '../components/UI/player/Player';
@@ -12,6 +13,7 @@ export default class SlotMachine extends Component {
     };
     this.hidePlayModal = this.hidePlayModal.bind(this);
     this.setPlayerInfo = this.setPlayerInfo.bind(this);
+    this.RedirectTo = this.RedirectTo.bind(this);
   }
 
   setStateAsync(state) {
@@ -30,6 +32,11 @@ export default class SlotMachine extends Component {
     this.setState({
       showModal: false,
     });
+  }
+
+  RedirectTo(page) {
+    const { history } = this.props;
+    history.push(`/${page}`);
   }
 
   render() {
@@ -56,7 +63,7 @@ export default class SlotMachine extends Component {
       );
       slotMachine = (
         <>
-          <Machine playerInfo={playerInfo} />
+          <Machine playerInfo={playerInfo} RedirectTo={this.RedirectTo} />
         </>
       );
     }
