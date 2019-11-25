@@ -55,6 +55,7 @@ export const Button = styled.button`
   font-size: 13px;
   font-weight: 900;
   letter-spacing: 1px;
+  text-transform: uppercase;
   margin: 0 auto 15px auto;
   display: table;
   transition: all .05s ease-in-out;

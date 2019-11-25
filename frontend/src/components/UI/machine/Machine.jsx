@@ -211,12 +211,13 @@ export default class Machine extends Component {
     const spinTop = spin;
     for (let i = 0; i < 3; i += 1) {
       if (spinTop[i] - 1 < 0) {
-        spinTop[i] = 4;
-        playerCombTop.push(slots[i][spinTop[i]]);
+        playerCombTop.push(slots[i][4]);
       } else {
         playerCombTop.push(slots[i][spinTop[i] - 1]);
       }
     }
+
+    console.log('playerCombTop:', playerCombTop);
 
     // Getting Center Combination
     const spinCenter = spin;
@@ -231,14 +232,17 @@ export default class Machine extends Component {
     // Getting Bottom Combination
     const playerCombBottom = [];
     const spinBottom = spin;
+    // console.log('spinBottom:', spinBottom);
     for (let i = 0; i < 3; i += 1) {
+      console.log('spinBottom[i] + 1:', spinBottom[i] + 1);
       if (spinBottom[i] + 1 > 4) {
-        spinBottom[i] = 0;
-        playerCombBottom.push(slots[i][spinBottom[i]]);
+        playerCombBottom.push(slots[i][0]);
       } else {
         playerCombBottom.push(slots[i][spinBottom[i] + 1]);
       }
     }
+
+    console.log('playerCombBottom:', playerCombBottom);
 
     // Counting each symbol on the Top line
     let bar3AmountTop = 0;
@@ -381,7 +385,6 @@ export default class Machine extends Component {
         },
       });
     }
-    console.log('cherriesAmountCenter:', cherriesAmountCenter);
     if (cherriesAmountCenter === 3) {
       tempBalance += 1000;
       this.blink(balanceRef);
