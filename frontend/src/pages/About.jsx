@@ -1,5 +1,21 @@
 import React, { Component } from 'react';
 
+import {
+  FaGithub,
+  FaLinkedinIn,
+  FaLinkedin,
+} from 'react-icons/fa';
+import Profile from '../static/img/Profile.jpg'
+
+import {
+  Title,
+  ProfilePicture,
+  Name,
+  SocialMedias,
+  Li,
+  A,
+} from '../styled-components/about.styled-components'
+
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -11,7 +27,33 @@ export default class Home extends Component {
   render() {
     return (
       <>
-        <h1>About page</h1>
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <Title>
+                This Website was developed by
+              </Title>
+              <ProfilePicture
+                src={Profile}
+              />
+              <Name>
+                Davi Silva
+              </Name>
+              <SocialMedias>
+                <Li>
+                  <A to="//github.com/Davi-Silva" target="__blank">
+                    <FaGithub />
+                  </A>
+                </Li>
+                <Li>
+                  <A to="//linkedin.com/in/davicsilva/" target="__blank">
+                    <FaLinkedinIn />
+                  </A>
+                </Li>
+              </SocialMedias>
+            </div>
+          </div>
+        </div>
       </>
     );
   }

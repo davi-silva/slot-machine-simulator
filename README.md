@@ -39,3 +39,9 @@ To start the frontend and the backend servers after the installation, navigate t
 ```bash
 yarn run dev
 ```
+
+----------------
+
+### This React app is also available at:
+
+[https://davi-slot-machine.herokuapp.com/](https://davi-slot-machine.herokuapp.com/)
