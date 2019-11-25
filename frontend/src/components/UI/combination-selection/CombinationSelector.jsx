@@ -82,9 +82,6 @@ export default class CombinationSelector extends Component {
       wheel2Choice,
       wheel3Choice,
     } = this.state;
-    console.log('wheel1Choice:', wheel1Choice);
-    console.log('wheel2Choice:', wheel2Choice);
-    console.log('wheel3Choice:', wheel3Choice);
     const ChooseComb = ChooseFixedSpin;
     ChooseComb(wheel1Choice, wheel2Choice, wheel3Choice);
   }

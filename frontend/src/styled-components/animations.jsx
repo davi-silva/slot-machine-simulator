@@ -46,3 +46,59 @@ export const blinkPayTable = keyframes`
     box-shadow: inset 0px 0px 5px rgba(255, 156, 0, 0.5);
 	}
 `;
+
+export const blinkTopBottomWinningLine = keyframes`
+  0% {
+    opacity: 0;
+  }
+	20% {
+    opacity: 0.33;
+	}
+  40% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0.33;
+	}
+  100% {
+    opacity: 0;
+  }
+`;
+
+export const blinkCenterWinningLine = keyframes`
+  0% {
+    opacity: 0;
+  }
+	20% {
+    opacity: 0.66;
+	}
+  40% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0.66;
+	}
+  100% {
+    opacity: 0;
+  }
+`;
+
+export const spinningWheels = keyframes`
+  0% {
+    transform: translateY(-28px);
+    filter: blur(0px);
+  }
+  35% {
+    filter: blur(3px);
+  }
+  50% {
+    transform: translateY(-283px);
+  }
+  75% {
+    filter: blur(3px);
+  }
+  100% {
+    transform: translateY(-28px);
+    filter: blur(0px);
+  }
+`;

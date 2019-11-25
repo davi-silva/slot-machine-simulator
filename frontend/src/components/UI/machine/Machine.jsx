@@ -6,7 +6,6 @@
 /* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
 
-// import { FaTintSlash } from 'react-icons/fa';
 import BAR from '../../../static/img/BAR.png';
 import BAR2 from '../../../static/img/2xBAR.png';
 import BAR3 from '../../../static/img/3xBAR.png';
@@ -30,10 +29,13 @@ import {
   Credits,
   SlotZeros,
   SlotWheels,
-  // WinningLine,
+  WinningLineTop,
+  WinningLineCenter,
+  WinningLineBottom,
   Wheel,
   WheelOverlay,
-  WheelImage,
+  BeforeSpinningWheelImage,
+  SpinningWheelImage,
   WheelImageBAR3,
   WheelImageBAR1,
   WheelImageBAR2,
@@ -72,6 +74,9 @@ export default class Machine extends Component {
       ],
       isSpinnig: false,
       spinning: 3,
+      isWheel1Spinning: false,
+      isWheel2Spinning: false,
+      isWheel3Spinning: false,
       spin: [0, 0, 0],
       fixedSpin: [0, 0, 0],
       fixedSpinChosen: false,
@@ -79,24 +84,10 @@ export default class Machine extends Component {
       balance: 0,
       showPayTable: false,
       showCombinationSelector: false,
-      winningLine: [],
+      winningLines: [0, 0, 0],
       triggerDisabled: false,
+      hasStarted: false,
       hasEnded: false,
-      spinningWheel1Styled: {
-        img: {
-          transform: 'translateY(-50px)',
-        },
-      },
-      spinningWheel2Styled: {
-        img: {
-          transform: 'translateY(-28px)',
-        },
-      },
-      spinningWheel3Styled: {
-        img: {
-          transform: 'translateY(-28px)',
-        },
-      },
       paytableRow: {
         cherryTop: false,
         cherryCenter: false,
@@ -202,6 +193,7 @@ export default class Machine extends Component {
       credits,
       balance,
       paytableRow,
+      winningLines,
     } = this.state;
     const {
       playerInfo,
@@ -210,35 +202,7 @@ export default class Machine extends Component {
       slotTrigger,
       slotCredit,
       balanceRef,
-      wheel1,
-      wheel2,
-      wheel3,
     } = this.refs;
-
-    const wheelChild1 = wheel1.childNodes;
-    const wheelChild2 = wheel2.childNodes;
-    const wheelChild3 = wheel3.childNodes;
-    const wheel1Imgs = [
-      wheelChild1[1],
-      wheelChild1[2],
-      wheelChild1[3],
-      wheelChild1[4],
-      wheelChild1[5],
-    ];
-    const wheel2Imgs = [
-      wheelChild2[1],
-      wheelChild2[2],
-      wheelChild2[3],
-      wheelChild2[4],
-      wheelChild2[5],
-    ];
-    const wheel3Imgs = [
-      wheelChild3[1],
-      wheelChild3[2],
-      wheelChild3[3],
-      wheelChild3[4],
-      wheelChild3[5],
-    ];
 
     let tempBalance = balance;
 
@@ -282,89 +246,22 @@ export default class Machine extends Component {
     let bar2AmountTop = 0;
     let cherriesAmountTop = 0;
     let sevensAmountTop = 0;
-    let count = 0;
     playerCombTop.forEach((symbol) => {
       if (symbol === 'bar3') {
         bar3AmountTop += 1;
-        // if (count === 0) {
-        //   wheel1Imgs.forEach((img) => {
-        //     img.classList.add('BAR3');
-        //   });
-        // } else if (count === 1) {
-        //   wheel2Imgs.forEach((img) => {
-        //     img.classList.add('BAR3');
-        //   });
-        // } else if (count === 2) {
-        //   wheel3Imgs.forEach((img) => {
-        //     img.classList.add('BAR3');
-        //   });
-        // }
       }
       if (symbol === 'bar') {
         barAmountTop += 1;
-        // if (count === 0) {
-        //   wheel1Imgs.forEach((img) => {
-        //     img.classList.add('BAR');
-        //   });
-        // } else if (count === 1) {
-        //   wheel2Imgs.forEach((img) => {
-        //     img.classList.add('BAR');
-        //   });
-        // } else if (count === 2) {
-        //   wheel3Imgs.forEach((img) => {
-        //     img.classList.add('BAR');
-        //   });
-        // }
       }
       if (symbol === 'bar2') {
         bar2AmountTop += 1;
-        // if (count === 0) {
-        //   wheel1Imgs.forEach((img) => {
-        //     img.classList.add('BAR2');
-        //   });
-        // } else if (count === 1) {
-        //   wheel2Imgs.forEach((img) => {
-        //     img.classList.add('BAR2');
-        //   });
-        // } else if (count === 2) {
-        //   wheel3Imgs.forEach((img) => {
-        //     img.classList.add('BAR2');
-        //   });
-        // }
       }
       if (symbol === 'seven') {
         sevensAmountTop += 1;
-        // if (count === 0) {
-        //   wheel1Imgs.forEach((img) => {
-        //     img.classList.add('SEVEN');
-        //   });
-        // } else if (count === 1) {
-        //   wheel2Imgs.forEach((img) => {
-        //     img.classList.add('SEVEN');
-        //   });
-        // } else if (count === 2) {
-        //   wheel3Imgs.forEach((img) => {
-        //     img.classList.add('SEVEN');
-        //   });
-        // }
       }
       if (symbol === 'cherry') {
         cherriesAmountTop += 1;
-        // if (count === 0) {
-        //   wheel1Imgs.forEach((img) => {
-        //     img.classList.add('CHERRY');
-        //   });
-        // } else if (count === 1) {
-        //   wheel2Imgs.forEach((img) => {
-        //     img.classList.add('CHERRY');
-        //   });
-        // } else if (count === 2) {
-        //   wheel3Imgs.forEach((img) => {
-        //     img.classList.add('CHERRY');
-        //   });
-        // }
       }
-      count += 1;
     });
 
     // Looking for any winning combination on the Top line
@@ -373,12 +270,22 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setState({
         balance: tempBalance,
+        winningLines: [
+          1,
+          winningLines[1],
+          winningLines[2],
+        ],
       });
     } else if (sevensAmountTop === 1 && cherriesAmountTop === 2) {
       tempBalance += 75;
       this.blink(balanceRef);
       this.setState({
         balance: tempBalance,
+        winningLines: [
+          1,
+          winningLines[1],
+          winningLines[2],
+        ],
       });
     }
 
@@ -412,12 +319,22 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setState({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          1,
+          winningLines[2],
+        ],
       });
     } else if (sevensAmountCenter === 1 && cherriesAmountCenter === 2) {
       tempBalance += 75;
       this.blink(balanceRef);
       this.setState({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          1,
+          winningLines[2],
+        ],
       });
     }
 
@@ -466,11 +383,15 @@ export default class Machine extends Component {
     }
     console.log('cherriesAmountCenter:', cherriesAmountCenter);
     if (cherriesAmountCenter === 3) {
-      console.log('There are 3 cherries in the center line');
       tempBalance += 1000;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          1,
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: true,
@@ -490,6 +411,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          winningLines[1],
+          1,
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -509,6 +435,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          1,
+          winningLines[1],
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -528,6 +459,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          1,
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -547,6 +483,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          winningLines[1],
+          1,
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -567,6 +508,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          winningLines[1],
+          1,
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -586,6 +532,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          winningLines[1],
+          1,
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -605,6 +556,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          1,
+          winningLines[1],
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -625,6 +581,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          1,
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -645,6 +606,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          winningLines[1],
+          1,
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -665,6 +631,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          1,
+          winningLines[1],
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -685,6 +656,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          1,
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -705,6 +681,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          winningLines[1],
+          1,
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -725,6 +706,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          1,
+          winningLines[1],
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -745,6 +731,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          1,
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -765,6 +756,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          winningLines[1],
+          1,
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -785,6 +781,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          1,
+          winningLines[1],
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -805,6 +806,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          1,
+          winningLines[2],
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -825,6 +831,11 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
+        winningLines: [
+          winningLines[0],
+          winningLines[1],
+          1,
+        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -880,29 +891,28 @@ export default class Machine extends Component {
   }
 
   stopSpin(wheelNumber) {
-    const {
-      wheel1,
-      wheel2,
-      wheel3,
-    } = this.refs;
-
     const { spinning } = this.state;
+    let tempSpinning = spinning;
     if (wheelNumber === 1) {
-      this.unblur(wheel1);
+      tempSpinning -= 1;
       this.setState({
-        spinning: spinning - 1,
+        spinning: tempSpinning,
+        isSpinnig: false,
+        isWheel1Spinning: false,
       });
     }
     if (wheelNumber === 2) {
-      this.unblur(wheel2);
+      tempSpinning -= 1;
       this.setState({
-        spinning: spinning - 1,
+        spinning: tempSpinning,
+        isWheel2Spinning: false,
       });
     }
     if (wheelNumber === 3) {
-      this.unblur(wheel3);
+      tempSpinning -= 1;
       this.setState({
-        spinning: spinning - 1,
+        spinning: tempSpinning,
+        isWheel3Spinning: false,
       });
     }
     if (wheelNumber === 4) {
@@ -916,9 +926,6 @@ export default class Machine extends Component {
 
   async spin() {
     const {
-      wheel1,
-      wheel2,
-      wheel3,
       slotTrigger,
       creditInput,
       slotZeros,
@@ -934,66 +941,7 @@ export default class Machine extends Component {
     } = this.state;
 
     if (!triggerDisabled) {
-      const wheelChild1 = wheel1.childNodes;
-      const wheelChild2 = wheel2.childNodes;
-      const wheelChild3 = wheel3.childNodes;
-      const wheel1Imgs = [
-        wheelChild1[1],
-        wheelChild1[2],
-        wheelChild1[3],
-        wheelChild1[4],
-        wheelChild1[5],
-      ];
-      const wheel2Imgs = [
-        wheelChild2[1],
-        wheelChild2[2],
-        wheelChild2[3],
-        wheelChild2[4],
-        wheelChild2[5],
-      ];
-      const wheel3Imgs = [
-        wheelChild3[1],
-        wheelChild3[2],
-        wheelChild3[3],
-        wheelChild3[4],
-        wheelChild3[5],
-      ];
-
       let tempCredits = credits;
-      // this.blink(slotCredit);
-      wheel1Imgs.forEach((img) => {
-        img.classList.remove('spinWheels');
-      });
-
-      wheel2Imgs.forEach((img) => {
-        img.classList.remove('spinWheels');
-      });
-
-      wheel2Imgs.forEach((img) => {
-        img.classList.remove('spinWheels');
-      });
-
-
-      setTimeout(() => {
-        this.blur(wheel1);
-        wheel1Imgs.forEach((img) => {
-          img.classList.add('spinWheels');
-        });
-      }, 200);
-
-      setTimeout(() => {
-        this.blur(wheel2);
-        wheel2Imgs.forEach((img) => {
-          img.classList.add('spinWheels');
-        });
-      }, 700);
-
-      setTimeout(() => {
-        this.blur(wheel3);
-        wheel3Imgs.forEach((img) => {
-          img.classList.add('spinWheels');
-        });
-      }, 1200);
 
       if (spinning === false) {
         this.blink(creditInput);
@@ -1001,6 +949,7 @@ export default class Machine extends Component {
         this.setState({
           spinning: 3,
           credits: credits - 1,
+          winningLines: [0, 0, 0],
         });
         tempCredits -= 1;
         // Update the credits display
@@ -1041,6 +990,10 @@ export default class Machine extends Component {
           spin[2] = parseInt(Math.random() * 5, 10);
         }
         this.setState({
+          isWheel1Spinning: true,
+          isWheel2Spinning: true,
+          isWheel3Spinning: true,
+          hasStarted: true,
           triggerDisabled: true,
           isSpinnig: true,
         });
@@ -1049,23 +1002,14 @@ export default class Machine extends Component {
         // Stop spinning wheels
         setTimeout(() => {
           this.stopSpin(1);
-          wheel1Imgs.forEach((img) => {
-            img.classList.remove('spinWheels');
-          });
         }, 2000);
 
         setTimeout(() => {
           this.stopSpin(2);
-          wheel2Imgs.forEach((img) => {
-            img.classList.remove('spinWheels');
-          });
         }, 2500);
 
         setTimeout(() => {
           this.stopSpin(3);
-          wheel3Imgs.forEach((img) => {
-            img.classList.remove('spinWheels');
-          });
         }, 3000);
 
         setTimeout(() => {
@@ -1077,13 +1021,6 @@ export default class Machine extends Component {
   }
 
   chooseFixedSpin(wheel1, wheel2, wheel3) {
-    // const {
-    //   fixedSpin,
-    // } = this.state;
-    console.log('wheel1:', wheel1);
-    console.log('wheel2:', wheel2);
-    console.log('wheel3:', wheel3);
-
     const tempFixedSpin = [0, 0, 0];
 
     this.setState({
@@ -1091,7 +1028,6 @@ export default class Machine extends Component {
     });
 
     if (wheel1 === 'bar3') {
-      console.log('wheel1 chooseFixedSpin:', wheel1);
       tempFixedSpin[0] = 0;
       this.setState({
         fixedSpin: [
@@ -1101,7 +1037,6 @@ export default class Machine extends Component {
         ],
       });
     } else if (wheel1 === 'bar') {
-      console.log('wheel1 chooseFixedSpin:', wheel1);
       tempFixedSpin[0] = 1;
       this.setState({
         fixedSpin: [
@@ -1111,7 +1046,6 @@ export default class Machine extends Component {
         ],
       });
     } else if (wheel1 === 'bar2') {
-      console.log('wheel1 chooseFixedSpin:', wheel1);
       tempFixedSpin[0] = 2;
       this.setState({
         fixedSpin: [
@@ -1121,7 +1055,6 @@ export default class Machine extends Component {
         ],
       });
     } else if (wheel1 === 'seven') {
-      console.log('wheel1 chooseFixedSpin:', wheel1);
       tempFixedSpin[0] = 3;
       this.setState({
         fixedSpin: [
@@ -1131,7 +1064,6 @@ export default class Machine extends Component {
         ],
       });
     } else if (wheel1 === 'cherry') {
-      console.log('wheel1 chooseFixedSpin:', wheel1);
       tempFixedSpin[0] = 4;
       this.setState({
         fixedSpin: [
@@ -1143,7 +1075,6 @@ export default class Machine extends Component {
     }
 
     if (wheel2 === 'bar3') {
-      console.log('wheel2 chooseFixedSpin:', wheel2);
       tempFixedSpin[1] = 0;
       this.setState({
         fixedSpin: [
@@ -1153,7 +1084,6 @@ export default class Machine extends Component {
         ],
       });
     } else if (wheel2 === 'bar') {
-      console.log('wheel2 chooseFixedSpin:', wheel2);
       tempFixedSpin[1] = 1;
       this.setState({
         fixedSpin: [
@@ -1163,7 +1093,6 @@ export default class Machine extends Component {
         ],
       });
     } else if (wheel2 === 'bar2') {
-      console.log('wheel2 chooseFixedSpin:', wheel2);
       tempFixedSpin[1] = 2;
       this.setState({
         fixedSpin: [
@@ -1173,7 +1102,6 @@ export default class Machine extends Component {
         ],
       });
     } else if (wheel2 === 'seven') {
-      console.log('wheel2 chooseFixedSpin:', wheel2);
       tempFixedSpin[1] = 3;
       this.setState({
         fixedSpin: [
@@ -1183,7 +1111,6 @@ export default class Machine extends Component {
         ],
       });
     } else if (wheel2 === 'cherry') {
-      console.log('wheel2 chooseFixedSpin:', wheel2);
       tempFixedSpin[1] = 4;
       this.setState({
         fixedSpin: [
@@ -1240,14 +1167,12 @@ export default class Machine extends Component {
         ],
       });
     }
+    setTimeout(() => {
+      this.setState({
+        showCombinationSelector: false,
+      });
+    }, 400);
   }
-
-  // endSlot() {
-  //   const { spinning } = this.state;
-  //   this.setState({
-
-  //   });
-  // }
 
   startSlot() {
     this.setState({
@@ -1404,12 +1329,12 @@ export default class Machine extends Component {
   render() {
     const {
       credits,
-      spin,
       isSpinnig,
-      spinningWheel1Styled,
-      spinningWheel2Styled,
-      spinningWheel3Styled,
-      // WinningLine,
+      isWheel1Spinning,
+      isWheel2Spinning,
+      isWheel3Spinning,
+      winningLines,
+      spin,
       debugMode,
       zeros,
       balance,
@@ -1417,6 +1342,7 @@ export default class Machine extends Component {
       showPayTable,
       showCombinationSelector,
       paytableRow,
+      hasStarted,
       hasEnded,
     } = this.state;
     const {
@@ -1430,6 +1356,9 @@ export default class Machine extends Component {
     let showCombSelector;
     let combSelector;
     let gameOverModal;
+    let winningLineTop;
+    let winningLineCenter;
+    let winningLineBottom;
 
     if (hasEnded) {
       gameOverModal = (
@@ -1504,196 +1433,342 @@ export default class Machine extends Component {
       );
     }
 
-    if (isSpinnig) {
+
+    if (winningLines[0] === 1) {
+      winningLineTop = (
+        <>
+          <WinningLineTop />
+        </>
+      );
+    } else if (winningLines[0] === 0) {
+      winningLineTop = (
+        <>
+        </>
+      );
+    }
+
+    if (winningLines[1] === 1) {
+      winningLineCenter = (
+        <>
+          <WinningLineCenter />
+        </>
+      );
+    } else if (winningLines[1] === 0) {
+      winningLineCenter = (
+        <>
+        </>
+      );
+    }
+
+    if (winningLines[2] === 1) {
+      winningLineBottom = (
+        <>
+          <WinningLineBottom />
+        </>
+      );
+    } else if (winningLines[2] === 0) {
+      winningLineBottom = (
+        <>
+        </>
+      );
+    }
+
+    if (hasStarted) {
+      if (isSpinnig) {
+        if (isWheel1Spinning) {
+          spinningWheel1 = (
+            <>
+              <SpinningWheelImage src={Cherry} />
+              <SpinningWheelImage src={BAR3} />
+              <SpinningWheelImage src={BAR} />
+              <SpinningWheelImage src={BAR2} />
+              <SpinningWheelImage src={Seven} />
+              <SpinningWheelImage src={Cherry} />
+              <SpinningWheelImage src={BAR3} />
+            </>
+          );
+        }
+
+        if (isWheel2Spinning) {
+          spinningWheel2 = (
+            <>
+              <SpinningWheelImage src={Cherry} />
+              <SpinningWheelImage src={BAR3} />
+              <SpinningWheelImage src={BAR} />
+              <SpinningWheelImage src={BAR2} />
+              <SpinningWheelImage src={Seven} />
+              <SpinningWheelImage src={Cherry} />
+              <SpinningWheelImage src={BAR3} />
+            </>
+          );
+        }
+
+        if (isWheel3Spinning) {
+          spinningWheel3 = (
+            <>
+              <SpinningWheelImage src={Cherry} />
+              <SpinningWheelImage src={BAR3} />
+              <SpinningWheelImage src={BAR} />
+              <SpinningWheelImage src={BAR2} />
+              <SpinningWheelImage src={Seven} />
+              <SpinningWheelImage src={Cherry} />
+              <SpinningWheelImage src={BAR3} />
+            </>
+          );
+        }
+      } else {
+        // Stopped spinning wheel on the right symbol
+        // First Spinning Wheel
+        if (spin[0] === 0) {
+          spinningWheel1 = (
+            <>
+              <WheelImageBAR3 src={Cherry} />
+              <WheelImageBAR3 src={BAR3} />
+              <WheelImageBAR3 src={BAR} />
+              <WheelImageBAR3 src={BAR2} />
+              <WheelImageBAR3 src={Seven} />
+              <WheelImageBAR3 src={Cherry} />
+              <WheelImageBAR3 src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[0] === 1) {
+          spinningWheel1 = (
+            <>
+              <WheelImageBAR1 src={Cherry} />
+              <WheelImageBAR1 src={BAR3} />
+              <WheelImageBAR1 src={BAR} />
+              <WheelImageBAR1 src={BAR2} />
+              <WheelImageBAR1 src={Seven} />
+              <WheelImageBAR1 src={Cherry} />
+              <WheelImageBAR1 src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[0] === 2) {
+          spinningWheel1 = (
+            <>
+              <WheelImageBAR2 src={Cherry} />
+              <WheelImageBAR2 src={BAR3} />
+              <WheelImageBAR2 src={BAR} />
+              <WheelImageBAR2 src={BAR2} />
+              <WheelImageBAR2 src={Seven} />
+              <WheelImageBAR2 src={Cherry} />
+              <WheelImageBAR2 src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[0] === 3) {
+          spinningWheel1 = (
+            <>
+              <WheelImageSeven src={Cherry} />
+              <WheelImageSeven src={BAR3} />
+              <WheelImageSeven src={BAR} />
+              <WheelImageSeven src={BAR2} />
+              <WheelImageSeven src={Seven} />
+              <WheelImageSeven src={Cherry} />
+              <WheelImageSeven src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[0] === 4) {
+          spinningWheel1 = (
+            <>
+              <WheelImageCherry src={Cherry} />
+              <WheelImageCherry src={BAR3} />
+              <WheelImageCherry src={BAR} />
+              <WheelImageCherry src={BAR2} />
+              <WheelImageCherry src={Seven} />
+              <WheelImageCherry src={Cherry} />
+              <WheelImageCherry src={BAR3} />
+            </>
+          );
+        }
+
+        // Second spinning wheel
+        if (spin[1] === 0) {
+          spinningWheel2 = (
+            <>
+              <WheelImageBAR3 src={Cherry} />
+              <WheelImageBAR3 src={BAR3} />
+              <WheelImageBAR3 src={BAR} />
+              <WheelImageBAR3 src={BAR2} />
+              <WheelImageBAR3 src={Seven} />
+              <WheelImageBAR3 src={Cherry} />
+              <WheelImageBAR3 src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[1] === 1) {
+          spinningWheel2 = (
+            <>
+              <WheelImageBAR1 src={Cherry} />
+              <WheelImageBAR1 src={BAR3} />
+              <WheelImageBAR1 src={BAR} />
+              <WheelImageBAR1 src={BAR2} />
+              <WheelImageBAR1 src={Seven} />
+              <WheelImageBAR1 src={Cherry} />
+              <WheelImageBAR1 src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[1] === 2) {
+          spinningWheel2 = (
+            <>
+              <WheelImageBAR2 src={Cherry} />
+              <WheelImageBAR2 src={BAR3} />
+              <WheelImageBAR2 src={BAR} />
+              <WheelImageBAR2 src={BAR2} />
+              <WheelImageBAR2 src={Seven} />
+              <WheelImageBAR2 src={Cherry} />
+              <WheelImageBAR2 src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[1] === 3) {
+          spinningWheel2 = (
+            <>
+              <WheelImageSeven src={Cherry} />
+              <WheelImageSeven src={BAR3} />
+              <WheelImageSeven src={BAR} />
+              <WheelImageSeven src={BAR2} />
+              <WheelImageSeven src={Seven} />
+              <WheelImageSeven src={Cherry} />
+              <WheelImageSeven src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[1] === 4) {
+          spinningWheel2 = (
+            <>
+              <WheelImageCherry src={Cherry} />
+              <WheelImageCherry src={BAR3} />
+              <WheelImageCherry src={BAR} />
+              <WheelImageCherry src={BAR2} />
+              <WheelImageCherry src={Seven} />
+              <WheelImageCherry src={Cherry} />
+              <WheelImageCherry src={BAR3} />
+            </>
+          );
+        }
+
+        // Third spinning wheel
+        if (spin[2] === 0) {
+          spinningWheel3 = (
+            <>
+              <WheelImageBAR3 src={Cherry} />
+              <WheelImageBAR3 src={BAR3} />
+              <WheelImageBAR3 src={BAR} />
+              <WheelImageBAR3 src={BAR2} />
+              <WheelImageBAR3 src={Seven} />
+              <WheelImageBAR3 src={Cherry} />
+              <WheelImageBAR3 src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[2] === 1) {
+          spinningWheel3 = (
+            <>
+              <WheelImageBAR1 src={Cherry} />
+              <WheelImageBAR1 src={BAR3} />
+              <WheelImageBAR1 src={BAR} />
+              <WheelImageBAR1 src={BAR2} />
+              <WheelImageBAR1 src={Seven} />
+              <WheelImageBAR1 src={Cherry} />
+              <WheelImageBAR1 src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[2] === 2) {
+          spinningWheel3 = (
+            <>
+              <WheelImageBAR2 src={Cherry} />
+              <WheelImageBAR2 src={BAR3} />
+              <WheelImageBAR2 src={BAR} />
+              <WheelImageBAR2 src={BAR2} />
+              <WheelImageBAR2 src={Seven} />
+              <WheelImageBAR2 src={Cherry} />
+              <WheelImageBAR2 src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[2] === 3) {
+          spinningWheel3 = (
+            <>
+              <WheelImageSeven src={Cherry} />
+              <WheelImageSeven src={BAR3} />
+              <WheelImageSeven src={BAR} />
+              <WheelImageSeven src={BAR2} />
+              <WheelImageSeven src={Seven} />
+              <WheelImageSeven src={Cherry} />
+              <WheelImageSeven src={BAR3} />
+            </>
+          );
+        }
+
+        if (spin[2] === 4) {
+          spinningWheel3 = (
+            <>
+              <WheelImageCherry src={Cherry} />
+              <WheelImageCherry src={BAR3} />
+              <WheelImageCherry src={BAR} />
+              <WheelImageCherry src={BAR2} />
+              <WheelImageCherry src={Seven} />
+              <WheelImageCherry src={Cherry} />
+              <WheelImageCherry src={BAR3} />
+            </>
+          );
+        }
+      }
+    } else {
       spinningWheel1 = (
         <>
-          <>
-            <Wheel
-              ref="wheel1"
-              id="wheel1"
-            >
-              <WheelOverlay />
-              <WheelImage src={Cherry} className="slotSpinAnimation" />
-              <WheelImage src={BAR3} className="slotSpinAnimation" />
-              <WheelImage src={BAR} className="slotSpinAnimation" />
-              <WheelImage src={BAR2} className="slotSpinAnimation" />
-              <WheelImage src={Seven} className="slotSpinAnimation" />
-              <WheelImage src={Cherry} className="slotSpinAnimation" />
-              <WheelImage src={BAR3} className="slotSpinAnimation" />
-            </Wheel>
-          </>
+          <BeforeSpinningWheelImage src={Cherry} />
+          <BeforeSpinningWheelImage src={BAR3} />
+          <BeforeSpinningWheelImage src={BAR} />
+          <BeforeSpinningWheelImage src={BAR2} />
+          <BeforeSpinningWheelImage src={Seven} />
+          <BeforeSpinningWheelImage src={Cherry} />
+          <BeforeSpinningWheelImage src={BAR3} />
         </>
       );
-    } else if (!isSpinnig) {
-      console.log('Giro Maroto');
-      if (spin[0] === 0) {
-        spinningWheel1 = (
-          <>
-            <Wheel
-              ref="wheel1"
-              id="wheel1"
-            >
-              <WheelOverlay />
-              <WheelImageBAR3 src={Cherry} className="slotSpinAnimation" />
-              <WheelImageBAR3 src={BAR3} className="slotSpinAnimation" />
-              <WheelImageBAR3 src={BAR} className="slotSpinAnimation" />
-              <WheelImageBAR3 src={BAR2} className="slotSpinAnimation" />
-              <WheelImageBAR3 src={Seven} className="slotSpinAnimation" />
-              <WheelImageBAR3 src={Cherry} className="slotSpinAnimation" />
-              <WheelImageBAR3 src={BAR3} className="slotSpinAnimation" />
-            </Wheel>
-          </>
-        );
-      } else if (spin[0] === 1) {
-        spinningWheel1 = (
-          <>
-            <Wheel
-              ref="wheel1"
-              id="wheel1"
-            >
-              <WheelOverlay />
-              <WheelImageBAR1 src={Cherry} className="slotSpinAnimation" />
-              <WheelImageBAR1 src={BAR3} className="slotSpinAnimation" />
-              <WheelImageBAR1 src={BAR} className="slotSpinAnimation" />
-              <WheelImageBAR1 src={BAR2} className="slotSpinAnimation" />
-              <WheelImageBAR1 src={Seven} className="slotSpinAnimation" />
-              <WheelImageBAR1 src={Cherry} className="slotSpinAnimation" />
-              <WheelImageBAR1 src={BAR3} className="slotSpinAnimation" />
-            </Wheel>
-          </>
-        );
-      } else if (spin[0] === 2) {
-        spinningWheel1 = (
-          <>
-            <Wheel
-              ref="wheel1"
-              id="wheel1"
-            >
-              <WheelOverlay />
-              <WheelImageBAR2 src={Cherry} className="slotSpinAnimation" />
-              <WheelImageBAR2 src={BAR3} className="slotSpinAnimation" />
-              <WheelImageBAR2 src={BAR} className="slotSpinAnimation" />
-              <WheelImageBAR2 src={BAR2} className="slotSpinAnimation" />
-              <WheelImageBAR2 src={Seven} className="slotSpinAnimation" />
-              <WheelImageBAR2 src={Cherry} className="slotSpinAnimation" />
-              <WheelImageBAR2 src={BAR3} className="slotSpinAnimation" />
-            </Wheel>
-          </>
-        );
-      } else if (spin[0] === 3) {
-        spinningWheel1 = (
-          <>
-            <Wheel
-              ref="wheel1"
-              id="wheel1"
-            >
-              <WheelOverlay />
-              <WheelImageSeven src={Cherry} className="slotSpinAnimation" />
-              <WheelImageSeven src={BAR3} className="slotSpinAnimation" />
-              <WheelImageSeven src={BAR} className="slotSpinAnimation" />
-              <WheelImageSeven src={BAR2} className="slotSpinAnimation" />
-              <WheelImageSeven src={Seven} className="slotSpinAnimation" />
-              <WheelImageSeven src={Cherry} className="slotSpinAnimation" />
-              <WheelImageSeven src={BAR3} className="slotSpinAnimation" />
-            </Wheel>
-          </>
-        );
-      } else if (spin[0] === 4) {
-        spinningWheel1 = (
-          <>
-            <Wheel
-              ref="wheel1"
-              id="wheel1"
-            >
-              <WheelOverlay />
-              <WheelImageCherry src={Cherry} className="slotSpinAnimation" />
-              <WheelImageCherry src={BAR3} className="slotSpinAnimation" />
-              <WheelImageCherry src={BAR} className="slotSpinAnimation" />
-              <WheelImageCherry src={BAR2} className="slotSpinAnimation" />
-              <WheelImageCherry src={Seven} className="slotSpinAnimation" />
-              <WheelImageCherry src={Cherry} className="slotSpinAnimation" />
-              <WheelImageCherry src={BAR3} className="slotSpinAnimation" />
-            </Wheel>
-          </>
-        );
-      }
-    }
 
-    if (spinningWheel2Styled === null) {
       spinningWheel2 = (
         <>
-          <Wheel
-            ref="wheel2"
-            id="wheel2"
-          >
-            <WheelOverlay />
-            <WheelImage src={Cherry} className="slotSpinAnimation" />
-            <WheelImage src={BAR3} className="slotSpinAnimation" />
-            <WheelImage src={BAR} className="slotSpinAnimation" />
-            <WheelImage src={BAR2} className="slotSpinAnimation" />
-            <WheelImage src={Seven} className="slotSpinAnimation" />
-            <WheelImage src={Cherry} className="slotSpinAnimation" />
-            <WheelImage src={BAR3} className="slotSpinAnimation" />
-          </Wheel>
+          <BeforeSpinningWheelImage src={Cherry} />
+          <BeforeSpinningWheelImage src={BAR3} />
+          <BeforeSpinningWheelImage src={BAR} />
+          <BeforeSpinningWheelImage src={BAR2} />
+          <BeforeSpinningWheelImage src={Seven} />
+          <BeforeSpinningWheelImage src={Cherry} />
+          <BeforeSpinningWheelImage src={BAR3} />
         </>
       );
-    } else if (spinningWheel2Styled !== null) {
-      spinningWheel2 = (
+
+      spinningWheel3 = (
         <>
-          <Wheel
-            ref="wheel2"
-            id="wheel2"
-          >
-            <WheelOverlay />
-            <WheelImage src={Cherry} className="slotSpinAnimation" />
-            <WheelImage src={BAR3} className="slotSpinAnimation" />
-            <WheelImage src={BAR} className="slotSpinAnimation" />
-            <WheelImage src={BAR2} className="slotSpinAnimation" />
-            <WheelImage src={Seven} className="slotSpinAnimation" />
-            <WheelImage src={Cherry} className="slotSpinAnimation" />
-            <WheelImage src={BAR3} className="slotSpinAnimation" />
-          </Wheel>
+          <BeforeSpinningWheelImage src={Cherry} />
+          <BeforeSpinningWheelImage src={BAR3} />
+          <BeforeSpinningWheelImage src={BAR} />
+          <BeforeSpinningWheelImage src={BAR2} />
+          <BeforeSpinningWheelImage src={Seven} />
+          <BeforeSpinningWheelImage src={Cherry} />
+          <BeforeSpinningWheelImage src={BAR3} />
         </>
       );
     }
 
-    if (spinningWheel3Styled === null) {
-      spinningWheel3 = (
-        <>
-          <Wheel
-            ref="wheel3"
-            id="wheel3"
-          >
-            <WheelOverlay />
-            <WheelImage src={Cherry} className="slotSpinAnimation" />
-            <WheelImage src={BAR3} className="slotSpinAnimation" />
-            <WheelImage src={BAR} className="slotSpinAnimation" />
-            <WheelImage src={BAR2} className="slotSpinAnimation" />
-            <WheelImage src={Seven} className="slotSpinAnimation" />
-            <WheelImage src={Cherry} className="slotSpinAnimation" />
-            <WheelImage src={BAR3} className="slotSpinAnimation" />
-          </Wheel>
-        </>
-      );
-    } else if (spinningWheel3Styled !== null) {
-      spinningWheel3 = (
-        <>
-          <Wheel
-            ref="wheel3"
-            id="wheel3"
-          >
-            <WheelOverlay />
-            <WheelImage src={Cherry} className="slotSpinAnimation" />
-            <WheelImage src={BAR3} className="slotSpinAnimation" />
-            <WheelImage src={BAR} className="slotSpinAnimation" />
-            <WheelImage src={BAR2} className="slotSpinAnimation" />
-            <WheelImage src={Seven} className="slotSpinAnimation" />
-            <WheelImage src={Cherry} className="slotSpinAnimation" />
-            <WheelImage src={BAR3} className="slotSpinAnimation" />
-          </Wheel>
-        </>
-      );
-    }
 
     const Checkbox = ({ className, checked, ...props }) => (
       <CheckboxContainer className={className}>
@@ -1782,6 +1857,9 @@ export default class Machine extends Component {
           <MachineBody>
             <SlotBlock />
             <SlotFrame />
+            {winningLineTop}
+            {winningLineCenter}
+            {winningLineBottom}
             <SlotGlazeBottom />
             {showCombSelector}
             <SlotDisplay>
@@ -1793,13 +1871,31 @@ export default class Machine extends Component {
               <SlotZeros ref="slotZeros">{zeros}</SlotZeros>
             </SlotDisplay>
             <SlotWheels>
-              {spinningWheel1}
+              <Wheel
+                ref="wheel1"
+                id="wheel1"
+              >
+                <WheelOverlay />
+                {spinningWheel1}
+              </Wheel>
             </SlotWheels>
             <SlotWheels>
-              {spinningWheel2}
+              <Wheel
+                ref="wheel2"
+                id="wheel2"
+              >
+                <WheelOverlay />
+                {spinningWheel2}
+              </Wheel>
             </SlotWheels>
             <SlotWheels>
-              {spinningWheel3}
+              <Wheel
+                ref="wheel3"
+                id="wheel3"
+              >
+                <WheelOverlay />
+                {spinningWheel3}
+              </Wheel>
             </SlotWheels>
             {trigger}
           </MachineBody>

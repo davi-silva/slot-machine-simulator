@@ -1,6 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 import styled from 'styled-components';
 
+import {
+  blinkTopBottomWinningLine,
+  blinkCenterWinningLine,
+  spinningWheels,
+} from './animations';
+
 export const SlotMachine = styled.div`
   height: 247px;
   width: 400px;
@@ -189,13 +195,48 @@ export const SlotWheels = styled.div`
   }
 `;
 
-export const WinningLine = styled.div`
+export const WinningLineTop = styled.div`
   height: 3px;
-  width: 150px;
+  width: 70%;
   border-radius: 10px;
-  position: fixed;
-  z-index: 99;
+  top: 45px;
+  left: 62px;
+  opacity: 0.33;
+  position: absolute;
+  border-radius: 50px;
+  z-index: 9999999;
+  background: linear-gradient(to left,#d13838 0%,#d66d15 100%);
+  animation: ${blinkTopBottomWinningLine} 1.5s ease-in-out forwards;
 `;
+
+export const WinningLineCenter = styled.div`
+    height: 3px;
+    width: 70%;
+    border-radius: 10px;
+    top: 95px;
+    left: 62px;
+    opacity: 0.66;
+    border-radius: 50px;
+    position: absolute;
+    z-index: 9999999;
+    background: linear-gradient(to left,#d13838 0%,#d66d15 100%);
+    animation: ${blinkCenterWinningLine} 1.5s ease-in-out forwards;
+`;
+
+export const WinningLineBottom = styled.div`
+  height: 3px;
+  width: 70%;
+  border-radius: 10px;
+  top: 149px;
+  left: 62px;
+  opacity: 0.33;
+  position: absolute;
+  border-radius: 50px;
+  z-index: 9999999;
+  background: linear-gradient(to left,#d13838 0%,#d66d15 100%);
+  animation: ${blinkTopBottomWinningLine} 1.5s ease-in-out forwards;
+`;
+
 
 export const Wheel = styled.div`
   background: #FFF;
@@ -218,13 +259,22 @@ export const WheelOverlay = styled.div`
   z-index: 2;
 `;
 
-export const WheelImage = styled.img`
+export const BeforeSpinningWheelImage = styled.img`
   height: 60px;
   max-width: 87px;
   display: table;
   margin: 0 auto;
   transform: translateY(-28px);
 `;
+
+export const SpinningWheelImage = styled.img`
+  height: 60px;
+  max-width: 87px;
+  display: table;
+  margin: 0 auto;
+  animation: ${spinningWheels} .35s ease-in-out infinite;
+`;
+
 
 export const WheelImageBAR3 = styled.img`
   height: 60px;
@@ -265,7 +315,6 @@ export const WheelImageCherry = styled.img`
   margin: 0 auto;
   transform: translateY(-270px);
 `;
-
 
 export const SlotTrigger = styled.div`
   cursor: pointer;

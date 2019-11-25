@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import {
   FaGithub,
   FaLinkedinIn,
-  FaLinkedin,
 } from 'react-icons/fa';
 import Profile from '../static/img/Profile.jpg'
 
