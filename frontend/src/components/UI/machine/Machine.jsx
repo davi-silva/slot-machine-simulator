@@ -217,8 +217,6 @@ export default class Machine extends Component {
       }
     }
 
-    console.log('playerCombTop:', playerCombTop);
-
     // Getting Center Combination
     const spinCenter = spin;
     const playerCombCenter = [
@@ -234,7 +232,6 @@ export default class Machine extends Component {
     const spinBottom = spin;
     // console.log('spinBottom:', spinBottom);
     for (let i = 0; i < 3; i += 1) {
-      console.log('spinBottom[i] + 1:', spinBottom[i] + 1);
       if (spinBottom[i] + 1 > 4) {
         playerCombBottom.push(slots[i][0]);
       } else {
@@ -317,29 +314,24 @@ export default class Machine extends Component {
       }
     });
 
+    const tempWinningLines = [0, 0, 0];
+
+
     // Looking for any winning combination on the Center line
     if (sevensAmountCenter === 2 && cherriesAmountCenter === 1) {
       tempBalance += 75;
       this.blink(balanceRef);
       this.setState({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          1,
-          winningLines[2],
-        ],
       });
+      tempWinningLines[1] = 1;
     } else if (sevensAmountCenter === 1 && cherriesAmountCenter === 2) {
       tempBalance += 75;
       this.blink(balanceRef);
       this.setState({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          1,
-          winningLines[2],
-        ],
       });
+      tempWinningLines[1] = 1;
     }
 
     // Counting each symbol on the Bottom line
@@ -384,17 +376,13 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[0] = 1;
     }
     if (cherriesAmountCenter === 3) {
       tempBalance += 1000;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          1,
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: true,
@@ -408,17 +396,13 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[1] = 1;
     }
     if (cherriesAmountBottom === 3) {
       tempBalance += 4000;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          winningLines[1],
-          1,
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -432,17 +416,13 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[2] = 1;
     }
     if (sevensAmountTop === 3) {
       tempBalance += 150;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          1,
-          winningLines[1],
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -456,17 +436,13 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[0] = 1;
     }
     if (sevensAmountCenter === 3) {
       tempBalance += 150;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          1,
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -480,17 +456,13 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[1] = 1;
     }
     if (sevensAmountBottom === 3) {
       tempBalance += 150;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          winningLines[1],
-          1,
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -504,6 +476,7 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[2] = 1;
     }
 
     if (sevensAmountBottom === 2 && cherriesAmountBottom === 1) {
@@ -511,11 +484,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          winningLines[1],
-          1,
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -529,17 +497,13 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[2] = 1;
     }
     if (sevensAmountBottom === 1 && cherriesAmountBottom === 2) {
       tempBalance += 75;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          winningLines[1],
-          1,
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -553,17 +517,13 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[2] = 1;
     }
     if (bar3AmountTop === 3) {
       tempBalance += 50;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          1,
-          winningLines[1],
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -577,6 +537,7 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[0] = 1;
     }
 
     if (bar3AmountCenter === 3) {
@@ -584,11 +545,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          1,
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -602,6 +558,7 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[1] = 1;
     }
 
     if (bar3AmountBottom === 3) {
@@ -609,11 +566,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          winningLines[1],
-          1,
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -627,6 +579,7 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[2] = 1;
     }
 
     if (bar2AmountTop === 3) {
@@ -634,11 +587,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          1,
-          winningLines[1],
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -652,6 +600,7 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[0] = 1;
     }
 
     if (bar2AmountCenter === 3) {
@@ -659,11 +608,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          1,
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -677,6 +621,7 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[1] = 1;
     }
 
     if (bar2AmountBottom === 3) {
@@ -684,11 +629,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          winningLines[1],
-          1,
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -702,6 +642,7 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[2] = 1;
     }
 
     if (barAmountTop === 3) {
@@ -709,11 +650,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          1,
-          winningLines[1],
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -727,6 +663,7 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[0] = 1;
     }
 
     if (barAmountCenter === 3) {
@@ -734,11 +671,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          1,
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -752,6 +684,7 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[1] = 1;
     }
 
     if (barAmountBottom === 3) {
@@ -759,11 +692,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          winningLines[1],
-          1,
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -777,6 +705,7 @@ export default class Machine extends Component {
           barsAny: paytableRow.barsAny,
         },
       });
+      tempWinningLines[2] = 1;
     }
 
     if (barAmountTop > 0 && barAmountTop < 3) {
@@ -784,11 +713,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          1,
-          winningLines[1],
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -802,6 +726,7 @@ export default class Machine extends Component {
           barsAny: true,
         },
       });
+      tempWinningLines[0] = 1;
     }
 
     if (barAmountCenter > 0 && barAmountCenter < 3) {
@@ -809,11 +734,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          1,
-          winningLines[2],
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -827,6 +747,7 @@ export default class Machine extends Component {
           barsAny: true,
         },
       });
+      tempWinningLines[1] = 1;
     }
 
     if (barAmountBottom > 0 && barAmountBottom < 3) {
@@ -834,11 +755,6 @@ export default class Machine extends Component {
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
-        winningLines: [
-          winningLines[0],
-          winningLines[1],
-          1,
-        ],
         paytableRow: {
           cherryTop: paytableRow.cherryTop,
           cherryCenter: paytableRow.cherryCenter,
@@ -852,12 +768,18 @@ export default class Machine extends Component {
           barsAny: true,
         },
       });
+      tempWinningLines[2] = 1;
     }
 
     setTimeout(() => {
       this.setStateAsync({
         triggerDisabled: false,
         isSpinnig: false,
+        winningLines: [
+          tempWinningLines[0],
+          tempWinningLines[1],
+          tempWinningLines[2],
+        ],
       });
       slotTrigger.classList.remove('slotTriggerDisabled');
       slotCredit.classList.remove('blinkAnimation');

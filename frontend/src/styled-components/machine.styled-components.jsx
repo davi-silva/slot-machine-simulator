@@ -196,7 +196,7 @@ export const SlotWheels = styled.div`
 `;
 
 export const WinningLineTop = styled.div`
-  height: 3px;
+  height: 4px;
   width: 70%;
   border-radius: 10px;
   top: 45px;
@@ -210,7 +210,7 @@ export const WinningLineTop = styled.div`
 `;
 
 export const WinningLineCenter = styled.div`
-    height: 3px;
+    height: 4px;
     width: 70%;
     border-radius: 10px;
     top: 95px;

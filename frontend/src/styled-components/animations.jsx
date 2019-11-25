@@ -52,13 +52,13 @@ export const blinkTopBottomWinningLine = keyframes`
     opacity: 0;
   }
 	20% {
-    opacity: 0.33;
+    opacity: 0.66;
 	}
   40% {
     opacity: 0;
   }
   60% {
-    opacity: 0.33;
+    opacity: 0.66;
 	}
   100% {
     opacity: 0;
@@ -70,13 +70,13 @@ export const blinkCenterWinningLine = keyframes`
     opacity: 0;
   }
 	20% {
-    opacity: 0.66;
+    opacity: 1;
 	}
   40% {
     opacity: 0;
   }
   60% {
-    opacity: 0.66;
+    opacity: 1;
 	}
   100% {
     opacity: 0;
