@@ -15,6 +15,7 @@ import {
   Title,
   Wheel,
   WheelImage,
+  Choose,
 } from '../../../styled-components/combination-selector.styled-components';
 
 export default class CombinationSelector extends Component {
@@ -29,6 +30,7 @@ export default class CombinationSelector extends Component {
     this.ChooseWheel1 = this.ChooseWheel1.bind(this);
     this.ChooseWheel2 = this.ChooseWheel2.bind(this);
     this.ChooseWheel3 = this.ChooseWheel3.bind(this);
+    this.ChoseCombination = this.ChoseCombination.bind(this);
   }
 
   hideCombinationSelector() {
@@ -40,37 +42,51 @@ export default class CombinationSelector extends Component {
   ChooseWheel1(e) {
     const { wheel1 } = this.refs;
     wheel1.childNodes.forEach((img) => {
-      console.log(img);
       img.classList.remove('ChosenCombination');
     });
     this.setState({
       wheel1Choice: e.target.classList[2],
     });
     e.target.classList.add('ChosenCombination');
+    console.log(e.target.classList[2]);
   }
 
   ChooseWheel2(e) {
     const { wheel2 } = this.refs;
     wheel2.childNodes.forEach((img) => {
-      console.log(img);
       img.classList.remove('ChosenCombination');
     });
     this.setState({
       wheel2Choice: e.target.classList[2],
     });
     e.target.classList.add('ChosenCombination');
+    console.log(e.target.classList[2]);
   }
 
   ChooseWheel3(e) {
     const { wheel3 } = this.refs;
     wheel3.childNodes.forEach((img) => {
-      console.log(img);
       img.classList.remove('ChosenCombination');
     });
     this.setState({
       wheel3Choice: e.target.classList[2],
     });
     e.target.classList.add('ChosenCombination');
+    console.log(e.target.classList[2]);
+  }
+
+  ChoseCombination() {
+    const { ChooseFixedSpin } = this.props;
+    const {
+      wheel1Choice,
+      wheel2Choice,
+      wheel3Choice,
+    } = this.state;
+    console.log('wheel1Choice:', wheel1Choice);
+    console.log('wheel2Choice:', wheel2Choice);
+    console.log('wheel3Choice:', wheel3Choice);
+    const ChooseComb = ChooseFixedSpin;
+    ChooseComb(wheel1Choice, wheel2Choice, wheel3Choice);
   }
 
 
@@ -190,6 +206,11 @@ export default class CombinationSelector extends Component {
                 className="cherry"
               />
             </Wheel>
+            <Choose
+              onClick={this.ChoseCombination}
+            >
+              Choose
+            </Choose>
           </CombinationSelectorBody>
         </CombinationSelectorShadow>
       </>

@@ -10,6 +10,8 @@ import {
   PastMatchesBody,
   List,
   LoadingAllContent,
+  Label,
+  LabelLi,
 } from '../styled-components/past-matches.styled-components';
 
 import PastMatchesList from '../components/UI/list/PastMatchesList.component';
@@ -108,47 +110,32 @@ export default class LeaderBoard extends Component {
               <Title>Past Matches</Title>
               <PastMatches>
                 <PastMatchesBody>
-                  <ul
-                    style={{
-                      display: 'table',
-                      margin: '0 auto',
-                      color: '#fff',
-                      textTransform: 'uppercase',
-                      fontSize: '13px',
-                      fontWeight: '900',
-                    }}
-                  >
-                    <li
+                  <Label>
+                    <LabelLi
                       style={{
-                        display: 'inline',
-                        position: 'absolute',
                         top: '29px',
                         left: '93px',
                       }}
                     >
 Player Name
-                    </li>
-                    <li
+                    </LabelLi>
+                    <LabelLi
                       style={{
-                        display: 'inline',
-                        position: 'absolute',
                         top: '29px',
                         left: '246px',
                       }}
                     >
 Total Balance
-                    </li>
-                    <li
+                    </LabelLi>
+                    <LabelLi
                       style={{
-                        display: 'inline',
-                        position: 'absolute',
                         top: '29px',
                         left: '447px',
                       }}
                     >
 Date
-                    </li>
-                  </ul>
+                    </LabelLi>
+                  </Label>
                   <List>
                     {allGames}
                   </List>

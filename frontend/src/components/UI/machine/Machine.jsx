@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -5,6 +6,7 @@
 /* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
 
+// import { FaTintSlash } from 'react-icons/fa';
 import BAR from '../../../static/img/BAR.png';
 import BAR2 from '../../../static/img/2xBAR.png';
 import BAR3 from '../../../static/img/3xBAR.png';
@@ -64,6 +66,8 @@ export default class Machine extends Component {
       ],
       spinning: 3,
       spin: [0, 0, 0],
+      fixedSpin: [0, 0, 0],
+      fixedSpinChosen: false,
       credits: 15,
       balance: 0,
       showPayTable: false,
@@ -116,6 +120,7 @@ export default class Machine extends Component {
     this.endGame = this.endGame.bind(this);
     this.ShowPaytable = this.ShowPaytable.bind(this);
     this.ShowCombinationSelector = this.ShowCombinationSelector.bind(this);
+    this.chooseFixedSpin = this.chooseFixedSpin.bind(this);
   }
 
 
@@ -868,6 +873,9 @@ export default class Machine extends Component {
       spinning,
       credits,
       triggerDisabled,
+      debugMode,
+      fixedSpin,
+      fixedSpinChosen,
     } = this.state;
 
     if (!triggerDisabled) {
@@ -962,9 +970,21 @@ export default class Machine extends Component {
           });
         }
         // Get ramdom number from 0 to 4
-        spin[0] = parseInt(Math.random() * 5, 10);
-        spin[1] = parseInt(Math.random() * 5, 10);
-        spin[2] = parseInt(Math.random() * 5, 10);
+        if (debugMode) {
+          if (!fixedSpinChosen) {
+            spin[0] = parseInt(Math.random() * 5, 10);
+            spin[1] = parseInt(Math.random() * 5, 10);
+            spin[2] = parseInt(Math.random() * 5, 10);
+          } else {
+            spin[0] = fixedSpin[0];
+            spin[1] = fixedSpin[1];
+            spin[2] = fixedSpin[2];
+          }
+        } else {
+          spin[0] = parseInt(Math.random() * 5, 10);
+          spin[1] = parseInt(Math.random() * 5, 10);
+          spin[2] = parseInt(Math.random() * 5, 10);
+        }
         this.setState({
           triggerDisabled: true,
         });
@@ -998,6 +1018,172 @@ export default class Machine extends Component {
       }
     }
     return false;
+  }
+
+  chooseFixedSpin(wheel1, wheel2, wheel3) {
+    // const {
+    //   fixedSpin,
+    // } = this.state;
+    console.log('wheel1:', wheel1);
+    console.log('wheel2:', wheel2);
+    console.log('wheel3:', wheel3);
+
+    const tempFixedSpin = [0, 0, 0];
+
+    this.setState({
+      fixedSpinChosen: true,
+    });
+
+    if (wheel1 === 'bar3') {
+      console.log('wheel1 chooseFixedSpin:', wheel1);
+      tempFixedSpin[0] = 0;
+      this.setState({
+        fixedSpin: [
+          0,
+          tempFixedSpin[1],
+          tempFixedSpin[2],
+        ],
+      });
+    } else if (wheel1 === 'bar') {
+      console.log('wheel1 chooseFixedSpin:', wheel1);
+      tempFixedSpin[0] = 1;
+      this.setState({
+        fixedSpin: [
+          1,
+          tempFixedSpin[1],
+          tempFixedSpin[2],
+        ],
+      });
+    } else if (wheel1 === 'bar2') {
+      console.log('wheel1 chooseFixedSpin:', wheel1);
+      tempFixedSpin[0] = 2;
+      this.setState({
+        fixedSpin: [
+          2,
+          tempFixedSpin[1],
+          tempFixedSpin[2],
+        ],
+      });
+    } else if (wheel1 === 'seven') {
+      console.log('wheel1 chooseFixedSpin:', wheel1);
+      tempFixedSpin[0] = 3;
+      this.setState({
+        fixedSpin: [
+          3,
+          tempFixedSpin[1],
+          tempFixedSpin[2],
+        ],
+      });
+    } else if (wheel1 === 'cherry') {
+      console.log('wheel1 chooseFixedSpin:', wheel1);
+      tempFixedSpin[0] = 4;
+      this.setState({
+        fixedSpin: [
+          4,
+          tempFixedSpin[1],
+          tempFixedSpin[2],
+        ],
+      });
+    }
+
+    if (wheel2 === 'bar3') {
+      console.log('wheel2 chooseFixedSpin:', wheel2);
+      tempFixedSpin[1] = 0;
+      this.setState({
+        fixedSpin: [
+          tempFixedSpin[0],
+          0,
+          tempFixedSpin[2],
+        ],
+      });
+    } else if (wheel2 === 'bar') {
+      console.log('wheel2 chooseFixedSpin:', wheel2);
+      tempFixedSpin[1] = 1;
+      this.setState({
+        fixedSpin: [
+          tempFixedSpin[0],
+          1,
+          tempFixedSpin[2],
+        ],
+      });
+    } else if (wheel2 === 'bar2') {
+      console.log('wheel2 chooseFixedSpin:', wheel2);
+      tempFixedSpin[1] = 2;
+      this.setState({
+        fixedSpin: [
+          tempFixedSpin[0],
+          2,
+          tempFixedSpin[2],
+        ],
+      });
+    } else if (wheel2 === 'seven') {
+      console.log('wheel2 chooseFixedSpin:', wheel2);
+      tempFixedSpin[1] = 3;
+      this.setState({
+        fixedSpin: [
+          tempFixedSpin[0],
+          3,
+          tempFixedSpin[2],
+        ],
+      });
+    } else if (wheel2 === 'cherry') {
+      console.log('wheel2 chooseFixedSpin:', wheel2);
+      tempFixedSpin[1] = 4;
+      this.setState({
+        fixedSpin: [
+          tempFixedSpin[0],
+          4,
+          tempFixedSpin[2],
+        ],
+      });
+    }
+
+    if (wheel3 === 'bar3') {
+      tempFixedSpin[2] = 0;
+      this.setState({
+        fixedSpin: [
+          tempFixedSpin[0],
+          tempFixedSpin[1],
+          0,
+        ],
+      });
+    } else if (wheel3 === 'bar') {
+      tempFixedSpin[2] = 1;
+      this.setState({
+        fixedSpin: [
+          tempFixedSpin[0],
+          tempFixedSpin[1],
+          1,
+        ],
+      });
+    } else if (wheel3 === 'bar2') {
+      tempFixedSpin[2] = 2;
+      this.setState({
+        fixedSpin: [
+          tempFixedSpin[0],
+          tempFixedSpin[1],
+          2,
+        ],
+      });
+    } else if (wheel3 === 'seven') {
+      tempFixedSpin[2] = 3;
+      this.setState({
+        fixedSpin: [
+          tempFixedSpin[0],
+          tempFixedSpin[1],
+          3,
+        ],
+      });
+    } else if (wheel3 === 'cherry') {
+      tempFixedSpin[2] = 4;
+      this.setState({
+        fixedSpin: [
+          tempFixedSpin[0],
+          tempFixedSpin[1],
+          4,
+        ],
+      });
+    }
   }
 
   // endSlot() {
@@ -1229,6 +1415,7 @@ export default class Machine extends Component {
         <>
           <CombinationSelector
             ShowCombSelector={this.ShowCombinationSelector}
+            ChooseFixedSpin={this.chooseFixedSpin}
           />
         </>
       );
@@ -1443,6 +1630,7 @@ export default class Machine extends Component {
             <SlotBlock />
             <SlotFrame />
             <SlotGlazeBottom />
+            {showCombSelector}
             <SlotDisplay>
               <SlotOverlayLine />
               <SlotCredits
@@ -1487,7 +1675,6 @@ export default class Machine extends Component {
           onMouseDown={this.ShowPaytable}
         />
         {paytable}
-        {showCombSelector}
         {combSelector}
       </>
     );

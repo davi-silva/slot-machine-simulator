@@ -6,6 +6,7 @@ export const Title = styled.h1`
     font-size: 20px;
     display: table;
     margin: 20px auto;
+    cursor: default;
     color: #333;
     letter-spacing: 1px;
 `;
@@ -99,4 +100,20 @@ export const Info = styled.p`
     font-size: 15px;
     display: table;
     margin: 0 auto;
+    cursor: default; 
+`;
+
+export const Label = styled.ul`
+    display: table;
+    margin: 0 auto;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 900;
+`;
+
+export const LabelLi = styled.li`
+    display: inline;
+    position: absolute;
+    cursor: default;
 `;

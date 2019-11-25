@@ -160,6 +160,7 @@ export const SlotZeros = styled.div`
   color: rgba(255,255,255,0.3);
   font-size: 20px;
   margin-top: 6px;
+  cursor: default;
   width: 149px!important;
   font-family: "Courier New",Courier,monospace;
   margin-left: 35px;
@@ -342,6 +343,7 @@ export const BalanceTitle = styled.b`
   color: #6d00e4;
   letter-spacing: 1px;
   font-size: 14px;
+  cursor: default;
   top: 10%;
   left: 50%;
   transform: translateX(-50%);
@@ -356,6 +358,7 @@ export const Balance = styled.h4`
   font-size: 27px;
   left: 50%;
   transform: translateX(-50%);
+  cursor: default;
   position: fixed;
   letter-spacing: 1px;
   width: 200px;
@@ -410,6 +413,7 @@ export const DebugTitle = styled.b`
   color: #333;
   font-size: 14px;
   top: 24%;
+  cursor: default;
   left: 50%;
   transform: translateX(-50%);
   position: fixed;
@@ -443,14 +447,16 @@ export const ShowCombinationSelectorButton = styled.button`
   color: #fff;
   font-weight: 900;
   font-size: 11px;
+  width: 100%;
   border: none;
-  top: 57.8%;
+  top: 68.8%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  position: fixed;
+  transform: translate(-50%,-50%);
+  position: relative;
   background: none;
   z-index: 999;
   transition: all .1s ease-in-out;
+
   &:active {
     color: transparent;
   }

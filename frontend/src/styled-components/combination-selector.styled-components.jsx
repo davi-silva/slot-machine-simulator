@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const CombinationSelectorShadow = styled.div`
-  height: 460px;
+  height: 475px;
   width: 370px;
   position: fixed;
   border-radius: 5px;
@@ -15,7 +15,7 @@ export const CombinationSelectorShadow = styled.div`
 
 export const CombinationSelectorBody = styled.div`
   background: linear-gradient(to right, #0058e4 0%, #9000e4 100%);
-  height: 460px;
+  height: 475px;
   width: 370px;
   border-radius: 5px;
   position: relative;
@@ -30,6 +30,7 @@ export const Title = styled.h6`
   text-transform: uppercase;
   display: table;
   margin: 27px auto 0 auto;
+  cursor: default;
 `;
 
 
@@ -55,5 +56,24 @@ export const WheelImage = styled.img`
   &:hover {
     cursor: pointer;
   }
+`;
 
+
+export const Choose = styled.button`
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  position: absolute;
+  bottom: 9px;
+  letter-spacing: 1px;
+  left: 45%;
+  transition: all .05s ease-in-out;
+  &:focus {
+    outline: none;
+  }
+  &:active {
+    transform: scale(0.9, 0.9); 
+  }
 `;
