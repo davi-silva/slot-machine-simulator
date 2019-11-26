@@ -9,6 +9,12 @@ export const Title = styled.h1`
     cursor: default;
     color: #333;
     letter-spacing: 1px;
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
+    @media (max-width: 550px) {
+        font-size: 16px;
+    }
 `;
 
 export const PastMatches = styled.div`
@@ -19,6 +25,15 @@ export const PastMatches = styled.div`
   display: table;
   margin: 0 auto 60px auto;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6), 0 1px 2px rgba(0, 0, 0, 0.6);
+  @media (max-width: 768px) {
+      width: 500px!important;
+  }
+  @media (max-width: 550px) {
+      width: 450px!important;
+  }
+  @media (max-width: 490px) {
+      width: 400px!important;
+  }
 `;
 
 export const PastMatchesBody = styled.div`
@@ -30,6 +45,15 @@ export const PastMatchesBody = styled.div`
   padding-bottom: 30px;
   display: table;
   margin: 0 auto;
+  @media (max-width: 768px) {
+      width: 500px!important;
+  }
+  @media (max-width: 550px) {
+      width: 450px!important;
+  }
+  @media (max-width: 490px) {
+      width: 400px!important;
+  }
 `;
 
 export const List = styled.ul`
@@ -69,6 +93,12 @@ export const GamesLi = styled.li`
     border-radius: 3px;
     height: 38px;
     padding: 0px 10px;
+    @media (max-width: 768px) {
+        height: 34px;
+    }
+    @media (max-width: 550px) {
+        height: 30px;
+    }
 `;
 
 export const Cell = styled.div`
@@ -101,6 +131,12 @@ export const Info = styled.p`
     display: table;
     margin: 0 auto;
     cursor: default; 
+    @media (max-width: 768px) {
+        font-size: 13px;
+    }
+    @media (max-width: 550px) {
+        font-size: 11px;
+    }
 `;
 
 export const Label = styled.ul`
@@ -112,8 +148,56 @@ export const Label = styled.ul`
     font-weight: 900;
 `;
 
-export const LabelLi = styled.li`
+export const LabelLiName = styled.li`
     display: inline;
     position: absolute;
     cursor: default;
+    top: 29px;
+    left: 93px;
+    @media (max-width: 768px) {
+        left: 88px;
+        top: 32px;
+        font-size: 9px;
+    }
+    @media (max-width: 550px) {
+        left: 78px;
+        top: 32px;
+        font-size: 9px;
+    }
+`;
+
+export const LabelLiBalance = styled.li`
+    display: inline;
+    position: absolute;
+    cursor: default;
+    top: 29px;
+    left: 246px;
+    @media (max-width: 768px) {
+        left: 215px;
+        top: 32px;
+        font-size: 9px;
+    }
+    @media (max-width: 550px) {
+        left: 194px;
+        top: 32px;
+        font-size: 9px;
+    }
+`;
+
+export const LabelLiDate = styled.li`
+    display: inline;
+    position: absolute;
+    cursor: default;
+    top: 29px;
+    left: 447px;
+    @media (max-width: 768px) {
+        left: 377px;
+        top: 32px;
+        font-size: 9px;
+    }
+    @media (max-width: 550px) {
+        left: 337px;
+        top: 32px;
+        font-size: 9px;
+    }
 `;

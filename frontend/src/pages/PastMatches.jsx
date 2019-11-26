@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {
   FaSpinner,
@@ -11,7 +11,9 @@ import {
   List,
   LoadingAllContent,
   Label,
-  LabelLi,
+  LabelLiName,
+  LabelLiBalance,
+  LabelLiDate,
 } from '../styled-components/past-matches.styled-components';
 
 import PastMatchesList from '../components/UI/list/PastMatchesList.component';
@@ -22,7 +24,6 @@ export default class LeaderBoard extends Component {
     this.state = {
       gamesList: [],
       page: 1,
-      hasMore: null,
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -32,18 +33,12 @@ export default class LeaderBoard extends Component {
 
   async componentDidMount() {
     const gamesList = await this.getFirstGames();
-    let more = true;
-    if (gamesList.length < 10) {
-      more = false;
-    }
     await this.setStateAsync({
       gamesList,
-      hasMore: more,
     });
   }
 
   async getFirstGames() {
-    // const { page } = this.state;
     this.response = await fetch('http://localhost:5000/games/', {
       method: 'GET',
       mode: 'cors',
@@ -64,7 +59,7 @@ export default class LeaderBoard extends Component {
   }
 
   render() {
-    const { gamesList, hasMore } = this.state;
+    const { gamesList } = this.state;
     let allGames;
     if (gamesList.length === 0) {
       allGames = (
@@ -82,11 +77,6 @@ export default class LeaderBoard extends Component {
       allGames = (
         <>
           <List>
-            <InfiniteScroll
-              dataLength={gamesList.length}
-              next={this.getMorePodcasts}
-              hasMore={hasMore}
-            >
               {
             gamesList.reverse().map((game, key) => (
               <PastMatchesList
@@ -97,7 +87,6 @@ export default class LeaderBoard extends Component {
               />
             ))
             }
-            </InfiniteScroll>
           </List>
         </>
       );
@@ -111,30 +100,15 @@ export default class LeaderBoard extends Component {
               <PastMatches>
                 <PastMatchesBody>
                   <Label>
-                    <LabelLi
-                      style={{
-                        top: '29px',
-                        left: '93px',
-                      }}
-                    >
+                    <LabelLiName>
 Player Name
-                    </LabelLi>
-                    <LabelLi
-                      style={{
-                        top: '29px',
-                        left: '246px',
-                      }}
-                    >
+                    </LabelLiName>
+                    <LabelLiBalance>
 Total Balance
-                    </LabelLi>
-                    <LabelLi
-                      style={{
-                        top: '29px',
-                        left: '447px',
-                      }}
-                    >
+                    </LabelLiBalance>
+                    <LabelLiDate>
 Date
-                    </LabelLi>
+                    </LabelLiDate>
                   </Label>
                   <List>
                     {allGames}
