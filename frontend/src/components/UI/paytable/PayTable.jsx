@@ -295,7 +295,7 @@ export default class PayTable extends Component {
               <div className="row pl-3 pr-3">
                 <div className="col-6 p-0">
                   <Image src={Seven} />
-                  <Image src={Cherry} />
+                  <Image src={Seven} />
                   <Image src={Cherry} />
                 </div>
                 <div className="col-3 p-0">
@@ -321,7 +321,7 @@ export default class PayTable extends Component {
               <div className="row pl-3 pr-3">
                 <div className="col-6 p-0">
                   <Image src={Seven} />
-                  <Image src={Cherry} />
+                  <Image src={Seven} />
                   <Image src={Cherry} />
                 </div>
                 <div className="col-3 p-0">

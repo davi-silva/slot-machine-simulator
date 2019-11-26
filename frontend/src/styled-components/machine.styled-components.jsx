@@ -516,11 +516,13 @@ export const ShowPaytable = styled.input`
   border: none;
   border-radius: 5px;
   display: table;
+  text-transform: uppercase;
   position: fixed;
   top: 70%;
+  font-size: 13px;
   left: 50%;
   transform: translate(-50%, 227%);
-  padding: 8px 30px;
+  padding: 13px 35px;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.3);
   transition: all .2s ease-in;
   user-select: none;

@@ -4,16 +4,17 @@ import {
   FaGithub,
   FaLinkedinIn,
 } from 'react-icons/fa';
-import Profile from '../static/img/Profile.jpg'
+import Profile from '../static/img/Profile.jpg';
 
 import {
   Title,
   ProfilePicture,
+  ProfilePictureShadow,
   Name,
   SocialMedias,
   Li,
   A,
-} from '../styled-components/about.styled-components'
+} from '../styled-components/about.styled-components';
 
 export default class Home extends Component {
   constructor(props) {
@@ -32,9 +33,11 @@ export default class Home extends Component {
               <Title>
                 This Website was developed by
               </Title>
-              <ProfilePicture
-                src={Profile}
-              />
+              <ProfilePictureShadow>
+                <ProfilePicture
+                  src={Profile}
+                />
+              </ProfilePictureShadow>
               <Name>
                 Davi Silva
               </Name>

@@ -192,7 +192,6 @@ export default class Machine extends Component {
       spin,
       credits,
       balance,
-      paytableRow,
       winningLines,
     } = this.state;
     const {
@@ -205,6 +204,18 @@ export default class Machine extends Component {
     } = this.refs;
 
     let tempBalance = balance;
+    const tempPaytableRow = [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+    ];
 
     // Getting Top Combination
     const playerCombTop = [];
@@ -320,16 +331,42 @@ export default class Machine extends Component {
     // Looking for any winning combination on the Center line
     if (sevensAmountCenter === 2 && cherriesAmountCenter === 1) {
       tempBalance += 75;
+      tempPaytableRow[4] = true;
       this.blink(balanceRef);
       this.setState({
         balance: tempBalance,
+        paytableRow: {
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
+        },
       });
       tempWinningLines[1] = 1;
     } else if (sevensAmountCenter === 1 && cherriesAmountCenter === 2) {
       tempBalance += 75;
+      tempPaytableRow[5] = true;
       this.blink(balanceRef);
       this.setState({
         balance: tempBalance,
+        paytableRow: {
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
+        },
       });
       tempWinningLines[1] = 1;
     }
@@ -360,120 +397,127 @@ export default class Machine extends Component {
 
     if (cherriesAmountTop === 3) {
       tempBalance += 2000;
+      tempPaytableRow[0] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: true,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[0] = 1;
     }
     if (cherriesAmountCenter === 3) {
+      console.log('cherryCenter:');
       tempBalance += 1000;
+      tempPaytableRow[1] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: true,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[1] = 1;
     }
     if (cherriesAmountBottom === 3) {
       tempBalance += 4000;
+      tempPaytableRow[2] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: true,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[2] = 1;
     }
     if (sevensAmountTop === 3) {
       tempBalance += 150;
+      tempPaytableRow[3] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: true,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[0] = 1;
     }
     if (sevensAmountCenter === 3) {
       tempBalance += 150;
+      tempPaytableRow[3] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: true,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[1] = 1;
     }
     if (sevensAmountBottom === 3) {
       tempBalance += 150;
+      tempPaytableRow[3] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: true,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[2] = 1;
@@ -481,60 +525,63 @@ export default class Machine extends Component {
 
     if (sevensAmountBottom === 2 && cherriesAmountBottom === 1) {
       tempBalance += 75;
+      tempPaytableRow[4] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: true,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[2] = 1;
     }
     if (sevensAmountBottom === 1 && cherriesAmountBottom === 2) {
       tempBalance += 75;
+      tempPaytableRow[5] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: true,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[2] = 1;
     }
     if (bar3AmountTop === 3) {
       tempBalance += 50;
+      tempPaytableRow[6] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: true,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[0] = 1;
@@ -542,20 +589,21 @@ export default class Machine extends Component {
 
     if (bar3AmountCenter === 3) {
       tempBalance += 50;
+      tempPaytableRow[6] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: true,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[1] = 1;
@@ -563,20 +611,21 @@ export default class Machine extends Component {
 
     if (bar3AmountBottom === 3) {
       tempBalance += 50;
+      tempPaytableRow[6] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: true,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[2] = 1;
@@ -584,20 +633,21 @@ export default class Machine extends Component {
 
     if (bar2AmountTop === 3) {
       tempBalance += 20;
+      tempPaytableRow[7] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: true,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[0] = 1;
@@ -605,20 +655,21 @@ export default class Machine extends Component {
 
     if (bar2AmountCenter === 3) {
       tempBalance += 20;
+      tempPaytableRow[7] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: true,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[1] = 1;
@@ -626,20 +677,21 @@ export default class Machine extends Component {
 
     if (bar2AmountBottom === 3) {
       tempBalance += 20;
+      tempPaytableRow[7] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: true,
-          bars: paytableRow.bars,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[2] = 1;
@@ -647,20 +699,21 @@ export default class Machine extends Component {
 
     if (barAmountTop === 3) {
       tempBalance += 10;
+      tempPaytableRow[8] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: true,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[0] = 1;
@@ -668,20 +721,21 @@ export default class Machine extends Component {
 
     if (barAmountCenter === 3) {
       tempBalance += 10;
+      tempPaytableRow[8] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: true,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[1] = 1;
@@ -689,20 +743,21 @@ export default class Machine extends Component {
 
     if (barAmountBottom === 3) {
       tempBalance += 10;
+      tempPaytableRow[8] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: true,
-          barsAny: paytableRow.barsAny,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[2] = 1;
@@ -710,20 +765,21 @@ export default class Machine extends Component {
 
     if (barAmountTop > 0 && barAmountTop < 3) {
       tempBalance += 5;
+      tempPaytableRow[9] = true;
       this.blink(balanceRef);
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: true,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[0] = 1;
@@ -735,16 +791,16 @@ export default class Machine extends Component {
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: true,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[1] = 1;
@@ -756,16 +812,16 @@ export default class Machine extends Component {
       this.setStateAsync({
         balance: tempBalance,
         paytableRow: {
-          cherryTop: paytableRow.cherryTop,
-          cherryCenter: paytableRow.cherryCenter,
-          cherryBottom: paytableRow.cherryBottom,
-          sevens: paytableRow.sevens,
-          sevenCherry: paytableRow.sevenCherry,
-          cherrySeven: paytableRow.cherrySeven,
-          bars3: paytableRow.bars3,
-          bars2: paytableRow.bars2,
-          bars: paytableRow.bars,
-          barsAny: true,
+          cherryTop: tempPaytableRow[0],
+          cherryCenter: tempPaytableRow[1],
+          cherryBottom: tempPaytableRow[2],
+          sevens: tempPaytableRow[3],
+          sevenCherry: tempPaytableRow[4],
+          cherrySeven: tempPaytableRow[5],
+          bars3: tempPaytableRow[6],
+          bars2: tempPaytableRow[7],
+          bars: tempPaytableRow[8],
+          barsAny: tempPaytableRow[9],
         },
       });
       tempWinningLines[2] = 1;
@@ -792,8 +848,10 @@ export default class Machine extends Component {
       bottomCombination: playerCombBottom,
     };
     this.submitRound(round);
+    console.log('balance before end of the game:', balance);
     if (credits <= 0 || credits === '0') {
       const allRoundsPlayed = await this.getRoundsByPlayer(playerInfo._id);
+      console.log('balance after end of the game:', balance);
       const game = {
         playerInfo,
         rounds: allRoundsPlayed,
@@ -802,6 +860,7 @@ export default class Machine extends Component {
       this.endGame(game);
       this.setState({
         hasEnded: true,
+        balance: tempBalance,
       });
       setTimeout(() => {
         this.RedirectToScoreboard();
@@ -878,7 +937,11 @@ export default class Machine extends Component {
         });
         tempCredits -= 1;
         // Update the credits display
-        if (tempCredits.toString().length === 1) {
+        if (tempCredits.toString().length === 0) {
+          this.setState({
+            credits: '1',
+          });
+        } else if (tempCredits.toString().length === 1) {
           this.setState({
             zeros: '00000000000',
           });
@@ -1745,6 +1808,7 @@ export default class Machine extends Component {
     }
 
     if (showPayTable) {
+      console.log('paytableRow:', paytableRow);
       paytable = (
         <>
           <PayTable

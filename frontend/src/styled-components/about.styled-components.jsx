@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export const Title = styled.p`
   color: #333;
@@ -7,6 +7,15 @@ export const Title = styled.p`
   margin: 15px auto;
   display: table;
   text-transform: uppercase;
+`;
+
+export const ProfilePictureShadow = styled.div`
+  height: 200px;
+  width: 200px;
+  display: table;
+  margin: 0 auto;
+  border-radius: 100px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.2);
 `;
 
 export const ProfilePicture = styled.img`
