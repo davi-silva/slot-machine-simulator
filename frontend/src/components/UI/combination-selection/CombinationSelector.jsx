@@ -48,7 +48,6 @@ export default class CombinationSelector extends Component {
       wheel1Choice: e.target.classList[2],
     });
     e.target.classList.add('ChosenCombination');
-    console.log(e.target.classList[2]);
   }
 
   ChooseWheel2(e) {
@@ -60,7 +59,6 @@ export default class CombinationSelector extends Component {
       wheel2Choice: e.target.classList[2],
     });
     e.target.classList.add('ChosenCombination');
-    console.log(e.target.classList[2]);
   }
 
   ChooseWheel3(e) {
@@ -72,7 +70,6 @@ export default class CombinationSelector extends Component {
       wheel3Choice: e.target.classList[2],
     });
     e.target.classList.add('ChosenCombination');
-    console.log(e.target.classList[2]);
   }
 
   ChoseCombination() {

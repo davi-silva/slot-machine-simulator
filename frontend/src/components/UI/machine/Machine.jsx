@@ -236,12 +236,9 @@ export default class Machine extends Component {
       slots[2][spinCenter[2]],
     ];
 
-    console.log('playerCombCenter:', playerCombCenter);
-
     // Getting Bottom Combination
     const playerCombBottom = [];
     const spinBottom = spin;
-    // console.log('spinBottom:', spinBottom);
     for (let i = 0; i < 3; i += 1) {
       if (spinBottom[i] + 1 > 4) {
         playerCombBottom.push(slots[i][0]);
@@ -249,8 +246,6 @@ export default class Machine extends Component {
         playerCombBottom.push(slots[i][spinBottom[i] + 1]);
       }
     }
-
-    console.log('playerCombBottom:', playerCombBottom);
 
     // Counting each symbol on the Top line
     let bar3AmountTop = 0;
@@ -417,7 +412,6 @@ export default class Machine extends Component {
       tempWinningLines[0] = 1;
     }
     if (cherriesAmountCenter === 3) {
-      console.log('cherryCenter:');
       tempBalance += 1000;
       tempPaytableRow[1] = true;
       this.blink(balanceRef);
@@ -848,10 +842,8 @@ export default class Machine extends Component {
       bottomCombination: playerCombBottom,
     };
     this.submitRound(round);
-    console.log('balance before end of the game:', balance);
     if (credits <= 0 || credits === '0') {
       const allRoundsPlayed = await this.getRoundsByPlayer(playerInfo._id);
-      console.log('balance after end of the game:', balance);
       const game = {
         playerInfo,
         rounds: allRoundsPlayed,
@@ -860,7 +852,6 @@ export default class Machine extends Component {
       this.endGame(game);
       this.setState({
         hasEnded: true,
-        balance: tempBalance,
       });
       setTimeout(() => {
         this.RedirectToScoreboard();
@@ -1808,7 +1799,6 @@ export default class Machine extends Component {
     }
 
     if (showPayTable) {
-      console.log('paytableRow:', paytableRow);
       paytable = (
         <>
           <PayTable
